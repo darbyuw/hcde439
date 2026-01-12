@@ -26,6 +26,8 @@ body {
   max-width: 1000px;
   padding: 2em;
   margin: auto;
+  background-color: #000C18;
+  color: #E7E7E7;
 }
 
 h1 {
@@ -42,6 +44,12 @@ h2 {
   margin-top: 1em;
 }
 
+.header .intro-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+}
+
 .header img {
   width: 50%;
   object-fit: cover;
@@ -55,12 +63,12 @@ h2 {
 }
 
 .assignment a {
-  color: #000;
+  color: #E7E7E7;
   text-decoration: none;
 }
 
 .assignment a:hover {
-  color: #f06;
+  color: #519ABA;
 }
 
 .assignment img {
