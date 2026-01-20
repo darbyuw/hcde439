@@ -11,7 +11,6 @@
   <body>
     <h1>Darby's A1 Blink! Assignment</h1>
     <div class="a1header">
-      <img src="red-panda.jpg" />
       <p>For this assignment I was tasked with creating a cool new pattern of blinking lights for a holiday light company.</p>
       <p> I was inspired by an artist that I enjoy named George Winston. I decided to make a blinking pattern of lights that syncs up to the 
         song "Carol of the Bells" by George Winston. For my project, I have coded the lights to blink in time with the piano notes in the song, 
@@ -25,14 +24,16 @@
       <img src="calculations.png" alt= "Caluations of the resistance needed for a red or green LED."/>
       <p> These are the calculations that I used to determine which resistor to use. I knew that the current across the circuit must be 20mA because Kirchoff's Law states that the current going through a simple series loop is constant. </p>
       <h2>Circuit</h2>
-      <img src="circuit.jpg" alt= "An image of a breadboard with five small LED lights."/>
-      <p> This is a picture of the actual circuit that I built on a breadboard. I lined up each light connected to different pins because ... </p>
+      <div class="images"> 
+        <img src="circuit_close.jpeg" alt= "A close up image of a breadboard with five small LED lights."/>
+        <img src="circuit_far.jpeg" alt= "A far away image of a breadboard with five small LED lights connected to an Arduino."/>
+      </div>
+      <p> This is a picture of the circuit that I built on a breadboard. I lined up each light connected to different pins because I only needed to connect five lights for my LED pattern.  </p>
     </div>
     <div class="code">
       <h2>Code</h2>
       <p> The following code was written for this assignment using the Arduino IDE: </p>
       <pre>
-        
 // This variable initializes the time between blinking lights to be 150 miliseconds:
 int timer = 150; 
 
@@ -96,16 +97,23 @@ void loop() {
     </div>
     <div class="animation">
       <h2>Animation</h2>
-      <p> Here is an animated gif of the lights blinking </p>
-      <img src="a1-animation.gif" alt="An animation of five lights blinking in a pattern."/>
+      <p> Here is an animated gif of the lights blinking: </p>
+      <img src="animation.gif" alt="An animation of five lights blinking in a pattern."/>
       <p> I have also included a video that shows how the lights can be synced up with the song.</p>
-      <h1> INCLUDE VIDEO HERE </h1>
+      <p>You can access a video of my project with sound here: <a href="https://youtu.be/Tq1VjQMIvZc">https://youtu.be/Tq1VjQMIvZc</a></p>
+      <p> If I spent more time on this assignment, I would have included more patterns with the lights to sync up with longer than eleven seconds of the song. </p>
     </div>
     <div class="questions">
       <h2>Questions</h2>
       <h3> 1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h3>
+      <img src="graph.jpg" alt="A graph showing voltage across the LEDs over time."/>
+      <p>This graph shows the voltage across all five LEDs over time, with each LED represented by a different line. This is one loop of the pattern, this graph would repeate eight times for an accurate represenation of the voltage over my circuit.</p>
       <h3> 2: How many LEDs could you blink independently with your Arduino? How much current would that draw?</h3>
+      <p> I could technically blink up to 10 LEDs independently with my Arduino which would draw the maximum of 200mA, however, 
+        it would be much safer to blink a maximum of 7 LEDs independently with my Arduino which would draw about 140mA. This avoids any risk of breaking the Arduino. </p>
       <h3> 3: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?</h3>
+      <p> At a 20 milisecond interval, I can tell that the light is fluctuating a bit, but I cannot see it turn completly off. At a 10 milisecond interval, I can not tell that the light is blinking, it looks like it is almost studdering but not turning off. At 45 miliseconds and above, I can tell that the light is turning all the way off and on. </p>
       <h3> 4: Did you use AI tools in completing this assignment? If yes, please provide details on how/when, as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like. </h3>
+      <p> Nope </p>
   </body>
 </html>
