@@ -4,15 +4,108 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+    <title>Darby's Assignment 1</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 1!</h1>
-    <div class="header">
+    <h1>Darby's A1 Blink! Assignment</h1>
+    <div class="a1header">
       <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 1!</p>
+      <p>For this assignment I was tasked with creating a cool new pattern of blinking lights for a holiday light company.</p>
+      <p> I was inspired by an artist that I enjoy named George Winston. I decided to make a blinking pattern of lights that syncs up to the 
+        song "Carol of the Bells" by George Winston. For my project, I have coded the lights to blink in time with the piano notes in the song, 
+        syncing up with the first eleven seconds of the song. 
+      </p>
     </div>
+    <div class="schematic">
+      <h2>Schematic</h2>
+      <img src="schematic.png" alt= "A sketch of the circuit."/>
+      <p> This is a schematic of the circuit that I built for this project. I decided to use 220 Ohm resistors because I calculated that a 150 Ohm resistance was needed for the red and green LED lights, so I used a 220 Ohm resistor to provide a safe current flow..</p>
+      <img src="calculations.png" alt= "Caluations of the resistance needed for a red or green LED."/>
+      <p> These are the calculations that I used to determine which resistor to use. I knew that the current across the circuit must be 20mA because Kirchoff's Law states that the current going through a simple series loop is constant. </p>
+      <h2>Circuit</h2>
+      <img src="circuit.jpg" alt= "An image of a breadboard with five small LED lights."/>
+      <p> This is a picture of the actual circuit that I built on a breadboard. I lined up each light connected to different pins because ... </p>
+    </div>
+    <div class="code">
+      <h2>Code</h2>
+      <p> The following code was written for this assignment using the Arduino IDE: </p>
+      <pre>
+        
+// This variable initializes the time between blinking lights to be 150 miliseconds:
+int timer = 150; 
+
+void setup() {
+  // Loop through all pins to intialize them:
+  for (int thisPin = 2; thisPin < 7; thisPin++) {
+    // Initialize each pin:
+    pinMode(thisPin, OUTPUT);
+  }
+}
+
+void loop() {
+  // This loop repeates 8 times, it turns on each light in a pattern:
+  for (int num = 0; num < 8; num++) {
+    // Turn the LED connected to pin 5 on:
+    digitalWrite(5, HIGH);
+    // Wait for 150 miliseconds
+    delay(timer);
+    // Turn the LED connected to pin 5 off:
+    digitalWrite(5, LOW);
+    // Wait for 100 miliseconds
+    delay(100);
+    // Turn the LED connected to pin 6 on:
+    digitalWrite(6, HIGH);
+    // Wait for 150 miliseconds
+    delay(timer);
+    // Turn the LED connected to pin 6 off:
+    digitalWrite(6, LOW);
+    // Wait for 200 miliseconds
+    delay(200);
+    // Turn the LED connected to pin 3 on:
+    digitalWrite(3, HIGH);
+    // Wait for 150 miliseconds
+    delay(timer);
+    // Turn the LED connected to pin 3 off:
+    digitalWrite(3, LOW);
+    // Wait for 100 miliseconds
+    delay(100);
+    // Turn the LED connected to pin 4 on:
+    digitalWrite(4, HIGH);
+    // Wait for 150 miliseconds
+    delay(timer);
+    // Turn the LED connected to pin 4 off:
+    digitalWrite(4, LOW);
+    // Wait for 75 miliseconds
+    delay(75);
+    // Turn the LED connected to pin 2 on:
+    digitalWrite(2, HIGH);
+    // Turn last note on for longer (200 miliseconds):
+    delay(200); 
+    // Turn the LED connected to pin 2 off:
+    digitalWrite(2, LOW);
+    // Wait for 150 miliseconds
+    delay(timer);
+  } 
+
+  // Wait 4 seconds before repeating the pattern:
+  delay(4000);
+}
+      </pre>
+    </div>
+    <div class="animation">
+      <h2>Animation</h2>
+      <p> Here is an animated gif of the lights blinking </p>
+      <img src="a1-animation.gif" alt="An animation of five lights blinking in a pattern."/>
+      <p> I have also included a video that shows how the lights can be synced up with the song.</p>
+      <h1> INCLUDE VIDEO HERE </h1>
+    </div>
+    <div class="questions">
+      <h2>Questions</h2>
+      <h3> 1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h3>
+      <h3> 2: How many LEDs could you blink independently with your Arduino? How much current would that draw?</h3>
+      <h3> 3: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?</h3>
+      <h3> 4: Did you use AI tools in completing this assignment? If yes, please provide details on how/when, as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like. </h3>
   </body>
 </html>

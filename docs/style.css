@@ -55,6 +55,25 @@ h2 {
   object-fit: cover;
 }
 
+.a1header {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.a1header img {
+  width: 50%;
+  object-fit: cover;
+}
+
+.schematic {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
