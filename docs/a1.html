@@ -20,7 +20,7 @@
     <div class="schematic">
       <h2>Schematic</h2>
       <img src="schematic.png" alt= "A sketch of the circuit."/>
-      <p> This is a schematic of the circuit that I built for this project. I decided to use 220 Ohm resistors because I calculated that a 150 Ohm resistance was needed for the red and green LED lights, so I used a 220 Ohm resistor to provide a safe current flow..</p>
+      <p> This is a schematic of the circuit that I built for this project. I decided to use 220 Ohm resistors because I calculated that a 150 Ohm resistance was needed for the red and green LED lights, so I used a 220 Ohm resistor to provide a safe current flow.</p>
       <img src="calculations.png" alt= "Caluations of the resistance needed for a red or green LED."/>
       <p> These are the calculations that I used to determine which resistor to use. I knew that the current across the circuit must be 20mA because Kirchoff's Law states that the current going through a simple series loop is constant. </p>
       <h2>Circuit</h2>
@@ -28,12 +28,13 @@
         <img src="circuit_close.jpeg" alt= "A close up image of a breadboard with five small LED lights."/>
         <img src="circuit_far.jpeg" alt= "A far away image of a breadboard with five small LED lights connected to an Arduino."/>
       </div>
-      <p> This is a picture of the circuit that I built on a breadboard. I lined up each light connected to different pins because I only needed to connect five lights for my LED pattern.  </p>
+      <p> This is a picture of the circuit that I built on a breadboard. I lined up each light connected to different pins because I only needed to connect five lights for my LED pattern, and this made it simpler to code the pattern. </p>
     </div>
     <div class="code">
       <h2>Code</h2>
       <p> The following code was written for this assignment using the Arduino IDE: </p>
       <pre>
+        <code>
 // This variable initializes the time between blinking lights to be 150 miliseconds:
 int timer = 150; 
 
@@ -93,6 +94,7 @@ void loop() {
   // Wait 4 seconds before repeating the pattern:
   delay(4000);
 }
+        </code>
       </pre>
     </div>
     <div class="animation">
@@ -107,7 +109,7 @@ void loop() {
       <h2>Questions</h2>
       <h3> 1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h3>
       <img src="graph.jpg" alt="A graph showing voltage across the LEDs over time."/>
-      <p>This graph shows the voltage across all five LEDs over time, with each LED represented by a different line. This is one loop of the pattern, this graph would repeate eight times for an accurate represenation of the voltage over my circuit.</p>
+      <p>This graph shows the voltage across all five LEDs over time, with each LED represented by a different line. This is one loop of the pattern, this graph would repeat eight times for an accurate representation of the voltage over my circuit.</p>
       <h3> 2: How many LEDs could you blink independently with your Arduino? How much current would that draw?</h3>
       <p> I could technically blink up to 10 LEDs independently with my Arduino which would draw the maximum of 200mA, however, 
         it would be much safer to blink a maximum of 7 LEDs independently with my Arduino which would draw about 140mA. This avoids any risk of breaking the Arduino. </p>
