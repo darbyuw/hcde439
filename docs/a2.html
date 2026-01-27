@@ -4,15 +4,232 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+    <title>Darby's Assignment 2</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 2!</h1>
-    <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 2!</p>
+    <h1>Darby's A2 Fade Assignment</h1>
+    <div class="a1header">
+      <p>For this assignment I was tasked with creating a prototype for a new light-up toy for a toy  company.</p>
+      <p> I have created a circuit that blinks one LED in a fading pattern between blue, green, and red. When that LED glows red, two additional red LEDs 
+        are turned on. There is a button that allows the 'toy' to be turned on and off. This pattern could be used in a toy with two red eyes.
+      </p>
     </div>
+    <div class="schematic">
+      <h2>Schematic</h2>
+      <div class="imagecrop">
+        <img src="a2_schematic.jpg" alt= "A schematic of the circuit."/>
+      </div>
+      <p> This is a schematic of the circuit that I built for this project. I decided to use 220 Ohm resistors for the RGB LED because I calculated (see below) that a 150 Ohm resistance was needed for the red and green LED light and about an 80 Ohm resistance was needed for the blue light. 
+        I decided to use a 220 Ohm resistor to provide a safe current flow because it is safer to use a higher resistance. I used a different resistor for the red LEDs in parallel, see why below:</p>
+      <img src="a2_calculations.jpg" alt= "Caluations of the resistance needed for an RGB LED and two red LEDs in parallel."/>
+      <p> These are the calculations that I used to determine which resistors to use. I used a 330 Ohm resistor for the red LEDs in parallel because I calculated that with a 330 Ohm resistor, the total current draw from the pin would not exceed 20mA. I also determined that a 10 Kili Ohm resistor 
+        was needed for the button because I used a pull-down configureation for the button and 10 Kili Ohm would provide a safe current flow when the button is pressed. 
+      </p>
+      <h2>Circuit</h2>
+      <div class="images"> 
+        <img src="a2_close_up.jpeg" alt= "A close up image of a breadboard with three small LED lights and a button."/>
+        <img src="a2_faraway.jpeg" alt= "A far away image of a breadboard with three small LED lights and a button connected to an Arduino."/>
+      </div>
+      <p> This is a picture of the circuit that I built on a breadboard. I connected each color of the RGB LED to a different pin because this allowed me to code behaviors for each color.
+        I connected the two red LEDs in parallel to the same pin so that they would turn on and off together. I connected the button to its own pin becuase this allowed me to take input on weather or not the button was being pressed. </p>
+    </div>
+    <div class="code">
+      <h2>Code</h2>
+      <p> The following code was written for this assignment using the Arduino IDE: </p>
+      <pre>
+        <code>
+    // Initialize a variable for the LED at pin 9
+    int led = 9;        
+    // Initialize a variable for the LED at pin 10 
+    int led2 = 10;
+    // Initialize a variable for the LED at pin 11
+    int led3 = 11;
+    // Initialize a variable for the LEDs at pin 3
+    int redLeds = 3;
+    // Initialize a variable for the brightness of the LED at pin 9
+    int brightness = 0;  
+    // Initialize a variable for the brightness of the LED at pin 10
+    int brightness2 = 0;
+    // Initialize a variable for the brightness of the LED at pin 11
+    int brightness3 = 0;
+    // Initialize a variable for how pany points to fade the LED by:
+    int fadeAmount = 5;  
+
+    // Set pin number for button:
+    const int buttonPin = 2;  
+
+    // Initialize variable for keeping track of the button status:
+    int currBtnState = 0;  
+    // Initialize variable for keeping track of the previous button status:
+    int prevBtnState = currBtnState;
+    // Initialize variable for keeping track of the LEDs status (are they on or off):
+    bool ledState = false;
+
+    // Set up all pins:
+    void setup() {
+      // Set up Serial to ensure code is working correctly
+      Serial.begin(9600);
+      // Declare pin 9 to be an output:
+      pinMode(led, OUTPUT);
+      // Declare pin 10 to be an output:
+      pinMode(led2, OUTPUT);
+      // Declare pin 11 to be an output:
+      pinMode(led3, OUTPUT);
+      // Declare pin 3 to be an output:
+      pinMode(redLeds, OUTPUT);
+      // Declare pin 2 to be an input:
+      pinMode(buttonPin, INPUT);
+    }
+
+    // The loop routine runs over and over again forever:
+    void loop() {
+
+      // Read the state of the push button value:
+      currBtnState = digitalRead(buttonPin);
+
+      // Check if the push button is pressed. If it is, the buttonState is HIGH. Check if the button was previously off
+      if (currBtnState == HIGH && prevBtnState == 0) {
+        // Print to the console that the button was pressed
+        Serial.println("button has been pressed");
+        // Check if the LEDs were previously on, if they are then ledState will be true. If they were on, we want to turn them off:
+        if (ledState == true) {
+          // Turn off the led at pin 9 by making the brightness 0
+          analogWrite(led, 0);
+          // Turn off the led at pin 10 by making the brightness 0
+          analogWrite(led2, 0);
+          // Turn off the led at pin 11 by making the brightness 0
+          analogWrite(led3, 0);
+          // Turn off the red leds at pin 3 by making the voltage LOW
+          digitalWrite(redLeds, LOW);
+          // Print to the console that LEDs were turned off:
+          Serial.println("turning leds off");
+          // Change the LED state to be false which means the LEDs are all off:
+          ledState = false;
+          // Check if the LEDs were previously off, if they are then ledState will be false. If they were off, we want to turn them on:
+        } else if (ledState == false) {
+          // Turn on the LED at pin 9 my reinstanting the previously used brightness 
+          analogWrite(led, brightness);
+          // Turn on the LED at pin 10 my reinstanting the previously used brightness 
+          analogWrite(led2, brightness2);
+          // Turn on the LED at pin 11 my reinstanting the previously used brightness 
+          analogWrite(led3, brightness3);
+          // Print to the console:
+          Serial.println("turning leds on");
+          // Change LED state to true because all lights are on now:
+          ledState = true;
+        }
+      } 
+
+      // reset the previous stored state of the button to the current state:
+      prevBtnState = currBtnState;
+
+      // Adjust the LED brightness only when LEDs are on. Check if LEDs are on:
+      if (ledState == true) {
+        // Repeate the pattern three times:
+        for (int num = 0; num < 3; num++) {
+
+          // Check if the brightness of the red and green LED are off (less than zero)
+          if (brightness2 <= 0 && brightness3 <= 0) {
+
+            // Turn the red LEDs off if they were on:
+            digitalWrite(redLeds, LOW);
+
+            // Set the brightness of pin 9:
+            analogWrite(led, brightness);
+
+            // Change the brightness for next time through the loop:
+            brightness = brightness + fadeAmount;
+
+            // Reverse the direction of the fading at the top of the fade:
+            if (brightness <= 0 || brightness >= 255) {
+              // Change the sign of the fade amount:
+              fadeAmount = -fadeAmount;
+            }
+
+            // Wait for 30 milliseconds to see the dimming effect
+            delay(50);
+          }
+
+          // Change to green:
+          // Check if the brightness of the blue and red LED are off (less than zero)
+          if (brightness <= 0 && brightness3 <= 0) {
+
+            // Turn the red LEDs off if they were on:
+            digitalWrite(redLeds, LOW);
+
+            // Set the brightness of pin 10:
+            analogWrite(led2, brightness2);
+
+            // Change the brightness for next time through the loop:
+            brightness2 = brightness2 + fadeAmount;
+
+            // Reverse the direction of the fading at the top of the fade:
+            if (brightness2 <= 0 || brightness2 >= 255) {
+              // Change the sign of the fade amount:
+              fadeAmount = -fadeAmount;
+            }
+
+            // Wait for 30 milliseconds to see the dimming effect
+            delay(50);
+          }
+
+          // Change to red:
+          // Check if the brightness of the blue and green LED are off (less than zero)
+          if (brightness <= 0 && brightness2 <= 0) {
+            
+            // Turn the red LEDs off if they were on:
+            digitalWrite(redLeds, HIGH);
+
+            // Set the brightness of pin 10:
+            analogWrite(led3, brightness3);
+
+            // Change the brightness for next time through the loop:
+            brightness3 = brightness3 + fadeAmount;
+
+            // Reverse the direction of the fading at the ends of the fade:
+            if (brightness3 <= 0 || brightness3 >= 255) {
+              // Change the sign of the fade amount:
+              fadeAmount = -fadeAmount;
+            }
+
+            // Wait for 30 milliseconds to see the dimming effect
+            delay(50);
+          }
+        }
+        // Wait for five seconds after the pattern has finished
+        delay(5000);
+      }
+    }
+        </code>
+      </pre>
+    </div>
+    <div class="animation">
+      <h2>Video</h2>
+      <p>You can access a video of my project here: <a href="https://youtu.be/xLgvoByri2Q">https://youtu.be/xLgvoByri2Q</a></p>
+      <p> If I were to complete this assignment again, I would have built some sort of physical container or box to hold the lights so that they appeared more like a toy. </p>
+    </div>
+    <div class="questions">
+      <h2>Questions</h2>
+      <h3>1: Draw a chart where the X axis is time and the Y axis is voltage. Draw 3 lines representing the voltage across an LED with analogWrite(led, 64), analogWrite(led, 128), and analogWrite(led, 255).</h3>
+        <div class="imagecrop2">
+          <img src="a2_duty_cycle.jpg" alt="A graph showing voltage across different duty cycles."/>
+        </div>
+        <br/>
+        <p>Because 64 is 25% of 255, we will see a lower duty cycle and a dimmer LED. Since 128 is 50% of 255, we will see a medium duty cycle and a medium LED. Since 255 is 100% of 255, we will see no LOW during the cuty cycle and the LED will be very bright.</p>
+      <h3>2:  If all your LEDs were on simultaneously, what would the total current draw be? Is this above or below the total Arduino current draw limits? If all your LEDs were on, how long would your circuit run if powered by a 1200 mAh battery?</h3>
+        <p>
+          If all the LEDs in my circuit were on, they would draw 20mA from each RGB color, plus 18mA from the red LEDs in parallel. This would be a total of 78mA. This is below the Arduino current draw limit.
+        </p>
+        <p>
+          Assuming that the Arduino draws 50mA, the total current draw from the cuircuit would be 128mA. Dividing 1200 mAh by 128 mA gives 9.375 hours. Therefore, my circuit would run for approximately 9.375 hours if powered by a 1200 mAh battery.
+        </p>
+        <br/>
+      <h3>3: Measure and record the actual voltage across one of your LEDs when it's on. How does this compare to the theoretical forward voltage for your LED color?</h3>
+        <p> I measured a voltage drop of 2.07 volts across one of the red LEDs in my circuit. the theoretical forward voltage for a red LED is typically around 2.0 volts, so my measurement is very close to the theoretical value.</p>
+        <br/>
+      <h3>4: Did you use AI tools in completing this assignment? If yes, please provide details on how/when, as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like.</h3>
+      <p> No, I did not use AI tools in completing this assignment.</p>
   </body>
 </html>
