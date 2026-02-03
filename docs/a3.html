@@ -44,7 +44,7 @@
         The calculations below explain how I determine the resistors for the seven segment display and the photocell.
       </p>
       <div class="imagecrop2">
-        <img src="A3_calculations.jpg" alt= "Caluations of the resistance needed for an RGB LED and two red LEDs in parallel."/>
+        <img src="A3_calculations.jpg" alt= "Caluations of resistance."/>
       </div>
       <p> 
         These are the calculations that I used to determine which resistors to use. I used a 220 Ohm resistor for each of the segments of 
@@ -417,22 +417,29 @@ void loop() {
         1: In your voltage divider, can the variable resistor be either R1 or R2 or does it need to be one or the other? 
         Justify your answer with example calculations.
       </h3>
-        <div class="imagecrop2">
-          <img src="a2_duty_cycle.jpg" alt="A graph showing voltage across different duty cycles."/>
+        <div class="imagecrop3">
+          <img src="a3_q1.jpg" alt="Calculations of variable resistors."/>
         </div>
         <br/>
         <p>
-          answer
+          Based on these calculations, the variable resistor can be either R1 or R2 in the voltage divider. 
+          If the variable resistor is R1, then a low resistance will result in a higher voltage out, but if the variable resistor is swapped in the 
+          equation, then a low resistance will result in a low voltage out. Therefore, either resistor can be the variable resistor depending on the desired outcome.
         </p>
+        <br/>
         <h3>
           2: Draw a graph where the x-axis is time and the y-axis is voltage. 
           Plot the voltage at V-measure (where your pin is reading the voltage) of your voltage divider of your shared gif/video.
         </h3>
+        
+        <div class="imagecrop2">
+          <img src="a3_voltage_graph.jpg" alt="Graph of voltage over time."/>
+        </div>
+        <br/>
         <p>
-          answer
-        </p>
-        <p>
-          answer
+          I covered the photocell four times in the video above, which is represented by the four dips in voltage on the graph. Each time the photocell is covered, the resistance increases, 
+          which causes the voltage at V-measure to decrease. This aligns with my calculations in question 1, where a low resistance (bright light) results
+          in a high voltage out, and a high resistance (darkness) results in a low voltage out.
         </p>
         <br/>
         <h3>
@@ -448,7 +455,7 @@ void loop() {
         </p>
         <br/>
         <h3>
-          4: Did you use AI tools in completing this assignment? If yes, please provide details on how/when, 
+          Did you use AI tools in completing this assignment? If yes, please provide details on how/when, 
           as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like.
         </h3>
         <p> No, I did not use AI tools in completing this assignment.</p>
