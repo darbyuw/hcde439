@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Darby's Assignment 4</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Darby's A4 Libraries Assignment</h1>
+    <div class="a1header">
+      <p>
+        For this assignment I was tasked with creating a cricuit that involves a library,an input sensor and an output actuator.
+      </p>
+      <p> 
+        I created a circuit that gathers touch information from the joystick sensor, displays text using an LCD display, and controls the angle of a servo motor. 
+        When the joystick is moved to the left, the LCD display shows the text "left" and the servo motor turns to 0 degrees. 
+        When the joystick is moved to the right, the LCD display shows the text "right" and the servo motor turns to 180 degrees. 
+        When the joystick is in the middle, the LCD display shows the text "centered" and the servo motor turns to 90 degrees. 
+        When the joystick is moved up, the LCD display shows the text "up" and when the joystick is moved down, the LCD display shows the text "down". Note that the up and down 
+        movements of the joystick do not affect the servo motor, but they do affect the LCD display.
+      </p>
+      <div class="animation">
+        <p>  
+          I began by attempting to use an IR remote and sensor, but I ran into issues with the code syntax, so I pivoted and decided to use the LCD display instead. 
+          After downloading the LiquidCrystal Library, I found a website online that helped me learn some functions to use the LCD display: <a href="https://www.circuitbasics.com/how-to-set-up-an-lcd-display-on-an-arduino/">
+            https://www.circuitbasics.com/how-to-set-up-an-lcd-display-on-an-arduino/</a>. From there, I modified the code to react 
+            to the input from the joystick sensor. I also used the Servo Library to control teh servo motor, which we had learned in class.
+        </p>
+      </div>
+    </div>
+    <div class="schematic">
+      <h2>Schematic</h2>
+      <div class="imagecrop">
+        <img src="a4_schematic.jpg" alt= "A schematic of the circuit."/>
+      </div>
+      <p> 
+        This is a schematic of the circuit that I built for this project. I decided to use a 220 Ohm resistor for the LCD display
+        because when I was seasrching information about using the LCD display, I found that 220 Ohm is a standard value for safe current flow. 
+      </p>
+      <h2>Circuit</h2>
+       
+        <img src="a4_far.jpeg" alt= "A far away image of a breadboard with five small LED lights connected to an Arduino."/>
+         <img src="a4_close.jpeg" alt= "A close up image of a breadboard with five small LED lights."/>
+      <p> 
+        This is a picture of the circuit that I built on a breadboard. 
+        I connected each pin of the LCD display to seperate pins and outputs on the Arduino based on the directions in on the website mentioned above.
+        I connected the joystick to the analog input pins because this allowed me to read the joystick's position in both x and y directions. 
+        I connected the servo motor to a digital output pin on the Arduino this allowed me to change the angle based on the joystick's position.  
+    </p>
+    </div>
+    <div class="code">
+      <h2>Code</h2>
+      <p> The following code was written for this assignment using the Arduino IDE: </p>
+      <pre>
+        <code>
+// Import the Liquid Crystal library to control the LCD display
+#include &ltLiquidCrystal.h&gt
+// Import the servo library to control teh servo motor
+#include &ltServo.h&gt
+// Initialize a Servo object
+Servo myServo;
+// Initialize an LiquidCrystal object with the pins used on the Arduino
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+// Initialize a variable for the analog input pin for x values
+int x = A0;
+// Initialize a variable for the analog input pin for y values
+int y = A1;
+// Initialize a variable for the joystick x values 
+int xVal = 0;
+// Initialize a variable for the joystick y values
+int yVal = 0;
+// Initialize a variable for the servo motor angle
+int angle = 0;
+
+void setup() {
+  // Attach the servo object to pin 9
+  myServo.attach(9); 
+  // begin the LCD with a 16 by two size screen
+  lcd.begin(16, 2);
+  // Start the serial monitor for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read in the x value from the joystick
+  xVal = analogRead(x);
+  // Read in the y value from the joystick
+  yVal = analogRead(y);
+  // Print the x value to the serial monitor
+  Serial.print("x = ");
+  // Print the x value to the serial monitor
+  Serial.println(xVal);
+  // Print the y value to the serial monitor
+  Serial.print("y = ");
+  // Print the y value to the serial monitor
+  Serial.println(yVal);
+  // Print a new line spce
+  Serial.println(); 
+  // Clear any previous text printed to the LCD display
+  lcd.clear();
+  // Set left and right values
+  if (xVal > 512 && xVal < 521) {
+    // Print centered if the Joystick is centered
+    lcd.print("centered");
+    // Print left if the joystick is reading less than 512
+  } else if (xVal <= 512) {
+    // Print left
+    lcd.print(" left");
+    // Print right if the joystick is reading over 521
+  } else if (xVal >= 521) {
+    // Print right
+    lcd.print(" right");
+  }
+  // Set up and down values
+  if (yVal > 510 && yVal < 520) {
+    // Set the cursor to the third column and the second row of the display
+    lcd.setCursor(2, 1);
+    // Print centered if the Joystick is centered
+    lcd.print("centered");
+  } else if (yVal <= 510) {
+    // Set the cursor to the third column and the second row of the display
+    lcd.setCursor(2, 1);
+    // Print up if the joystick is reading less than 510
+    lcd.print(" up");
+  } else if (yVal >= 520){
+    // Set the cursor to the third column and the second row of the display
+    lcd.setCursor(2, 1);
+    // Print down if the joystick is reading more than 520
+    lcd.print(" down");
+  }
+  // Set the angle by mapping the joystick x values to 0, 180
+  angle = map(xVal, 0, 1023, 0, 180);
+  // Print the angle to the serial monitor
+  Serial.print("angle = ");
+  // Print the angle to the serial monitor
+  Serial.println(angle);
+  // Write the angle to the servo motor
+  myServo.write(angle); 
+  // Wait for the servo to get to that location:
+  delay(25);
+}
+        </code>
+      </pre>
+    </div>
+    <div class="animation">
+      <h2>Video</h2>
+      <p>You can access a video of my project here: <a href="https://www.youtube.com/watch?v=l6OE07TPNfs">https://www.youtube.com/watch?v=l6OE07TPNfs</a></p>
+      <p> 
+        If I were to complete this assignment again, I would have coded the y values of the joystick to correspond to the servo motor somehow.
+      </p>
+    </div>
+    <div class="questions">
+      <h2>Questions</h2>
+      <h3>
+        1: Say you are using a servo motor you attach to pin 9. In your loop() you have the following code:
+        <pre>
+            <code>
+void loop() {
+for (pos = 0; pos <= 180; pos += 1) {
+  myservo.write(pos); 
+  delay(100); 
+  }
+} </code>
+        </pre>
+        Draw a graph with the x-axis as time and the y-axis as voltage at pin 9 with respect to ground.
+      </h3>
+          <img src="a4_q1.jpg" alt="Graph of servo motor voltage."/>
+        <p>
+          This graph shows the voltage of pin 9 over time. Each time thorugh the loop, the voltage increases from 0 to 180 in increments of one. After the loop is complete, 
+          the voltage drops back down to 0 and the pattern repeats. You can see the voltage increasing in this graph because at each 20 milisecond mark the voltage jump gets slightly longer/thicker. 
+        </p>
+        <br/>
+        <h3>
+          2: Your input device is slightly broken, leading it to give us an erroneous reading 1% of the time. How can we address this? Answer in (pseudo)code.
+        </h3>
+        <p>
+            To deal with outliers, we can keep track of the previous data value and if it is 2.5 times higher somehting must be worng. 
+            In this case, we will set the current data values to the previous data value. Example code can be seen here: 
+        </p>
+            <pre>
+                <code>
+int previousData = 0;
+int currentData = 0;
+void loop() {
+    currentData = analogRead(inputPin);
+    if (currentData > 2.5 * previousData) {
+        currentData = previousData;
+    } 
+    previousData = currentData;
+}</code>
+        </pre>
+        <p> Another way to deal with outliers is to set the value to the previous sensor value if it is outside a reasonable range, for example if you are only expecting to get values within 0 and 1023, 
+            then you can use an if statement to set the current value to the previous value if it is outside that range.
+        </p>
+      </div>
+        <br/>
+        <h3>
+          3: Your input device is slightly noisy, leading the measurement to randomly deviate from the true measurement up or down by 10%. How can we address this? Answer in (pseudo)code.
+        </h3>
+        <p> 
+            To remove noise in data, you can use a moving average filter with a sliding window algorithm. 
+            This means that you would take the average of the current data value and the previous 10 data values to get a smoothed out value. Example code can be seen here:
+        </p>
+            <pre>
+                <code>
+Void Loop {
+    Total = total - readings[readIndex];
+    readings[readIndex] = analogRead(inputPin);
+    Total = total + readings[readIndex];
+    readIndex++
+    If (readIndex >= numReadings) {
+        readIndex = 0
+    }
+    Average = total / numReadoings;
+    serial.println(average)
+} </code>
+        </pre>
+        <h3>
+          Did you use AI tools in completing this assignment? If yes, please provide details on how/when, 
+          as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like.
+        </h3>
+        <p> No, I did not use AI tools in completing this assignment.</p>
+    </div>
+  </body>
+</html>
+
