@@ -43,6 +43,8 @@ function draw() {
 
 // Three helper functions for managing the serial connection.
 
+
+// opens the port and creates a connect button:
 function setupSerial() {
   port = createSerial();
 
@@ -59,6 +61,8 @@ function setupSerial() {
   connectBtn.mouseClicked(onConnectButtonClicked); // When the button is clicked, run the onConnectButtonClicked function
 }
 
+
+// checks if youre connected
 function checkPort() {
   if (!port.opened()) {
     // If the port is not open, change button text
@@ -73,6 +77,7 @@ function checkPort() {
   }
 }
 
+// runs when connect button is clicked
 function onConnectButtonClicked() {
   // When the connect button is clicked
   if (!port.opened()) {
