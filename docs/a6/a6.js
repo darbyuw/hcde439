@@ -9,15 +9,15 @@ let stage = 0; // This variable will keep track of which page we are on in the g
 var jersey25;
 
 function preload() {
-    bgImg = loadImage("background.png");
-    startScreen = loadImage("startScreen.png");
-    logoImg = loadImage("logo.png");
+    // bgImg = loadImage("background.png");
+    // startScreen = loadImage("startScreen.png");
+    // logoImg = loadImage("logo.png");
     jersey25 = loadFont("Jersey25-Regular.ttf");
 }
 
 function setup() {
   setupSerial(); // Run our serial setup function (below)
-  createCanvas(800, 500, 'pixelated x4');
+  createCanvas(800, 500);
 }
 
 function draw() {
@@ -59,10 +59,10 @@ function startPage() {
     
     // If the button is not pressed, stay on the start page
     if (buttonState === 0) {
-        background(bgImg);
-        image(logoImg, 300, 50); // draw logo at top of the page
+        background("green");
+        // image(logoImg, 300, 50); // draw logo at top of the page
         // create a button:
-        fill("yellow");
+        fill("blue");
         rect(400, 300, 200, 50); // draw button
         textSize(10);
         fill("black");
@@ -70,8 +70,9 @@ function startPage() {
         textFont(jersey25); // change font to jersey25 font
         text("Start Game", 400, 310);
     } else if (buttonState === 1) {
+        background("lightskyblue");
         // If the button is pressed
-        stage = 1; // if so, move to next stage
+        // stage = 1; // if so, move to next stage
     }
 }
 
