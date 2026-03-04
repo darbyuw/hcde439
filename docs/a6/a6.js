@@ -6,8 +6,8 @@ let port, connectBtn; // Declare global variables
 let bgImg, startScreen, logoImg;
 let stage = 0; // This variable will keep track of which page we are on in the game
 let kettleChoice = 2; // This variable will keep track of the user's choice of kettle
-// make variable for which kettle is currently highlighted
-    let highlightedKettle = 2; // default to center kettle option being highlighted
+// make variable for which kettle is currently highlighted:
+let highlightedKettle = 2; // default to center kettle option being highlighted
 
 
 var jersey25;
@@ -38,18 +38,20 @@ function draw() {
     } else if (stage === 2) {
         chooseKettlePage();
     } else if (stage === 3) {
-        taskOnePage();
+        startFirstTask();
     } else if (stage === 4) {
-        chooseBowlPage();
+        taskOnePage();
     } else if (stage === 5) {
-        taskTwoPage();
+        chooseBowlPage();
     } else if (stage === 6) {
-        taskThreePage();
+        taskTwoPage();
     } else if (stage === 7) {
-        chooseCupPage();
+        taskThreePage();
     } else if (stage === 8) {
-        taskFourPage();
+        chooseCupPage();
     } else if (stage === 9) {
+        taskFourPage();
+    } else if (stage === 10) {
         endPage();
     }
 }
@@ -66,18 +68,18 @@ function startPage() {
     // If the button is not pressed, stay on the start page
     if (Number(buttonState) === 0) {
         background("#BACDB0");
-        image(logoImg, 300, 50, 200, 100); // draw logo at top of the page
+        image(logoImg, 300, 50, 446.48, 144.16); // draw logo at top of the page
         // create a button:
         fill("#134611");
-        rect(300, 275, 200, 50); // draw button
+        rect(300, 275, 100, 40); // draw button
         textSize(24);
         fill("#DEE9D8");
         textAlign(CENTER);
         textFont(jersey25); // change font to jersey25 font
-        text("Start Game", 400, 310);
+        text("Start Game", 350, 310);
         fill("#134611");
-        text(">", 250, 310); // draw ">" to indicate the button can be pressed
-        text("<", 550, 310);
+        text(">", 290, 310); // draw ">" to indicate the button can be pressed
+        text("<", 410, 310);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 1; // if so, move to next stage
@@ -130,36 +132,31 @@ function chooseKettlePage() {
     // grab all values and put them in an array of variables
     let [buttonState, xVal, yVal] = str.trim().split(",");
 
-    // if button not pressed, display all of the kettle options
-    if (Number(buttonState) === 0) {
-        // display kettles
-        background("#DEE9D8");
-        fill("#134611");
-        textAlign(CENTER);
-        textFont(jersey25); // change font to jersey25 font
-        textSize(40);
-        text("Pick a kettle to boil your water in!", 400, 50);
-        // draw three rectangles for the buttons of the three kettles:
-        rect(90, 315, 170, 40); // left kettle option
-        rect(320, 315, 150, 40); // center kettle option
-        rect(525, 315, 210, 40); // right kettle option
-        fill("#DEE9D8");
-        textAlign(LEFT, TOP);
-        textSize(24);
-        text("Classic Electric", 100, 325);
-        text("Green Electric", 330, 325);
-        text("Graves Stove Kettle", 540, 325);
-        // put images above each button
-        image(kettle1Img, 100, 200, 200, 200);
-        image(kettle2Img, 350, 200, 200, 200);
-        image(kettle3Img, 600, 200, 200, 200);
-        // make start task button at the bottom of the page
-        fill("#134611");
-        rect(520, 400, 220, 40); 
-        fill("#DEE9D8");
-        textSize(24);
-        text("Start First Homework Task!", 525, 410);
+    // display kettles weather or not the button is pressed:
+    background("#DEE9D8");
+    fill("#134611");
+    textAlign(CENTER);
+    textFont(jersey25); // change font to jersey25 font
+    textSize(40);
+    text("Pick a kettle to boil your water in!", 400, 50);
+    // draw three rectangles for the buttons of the three kettles:
+    rect(65, 315, 170, 40); // left kettle option
+    rect(320, 315, 150, 40); // center kettle option
+    rect(535, 315, 210, 40); // right kettle option
+    fill("#DEE9D8");
+    textAlign(LEFT, TOP);
+    textSize(24);
+    // Label the buttons: 
+    text("Classic Electric", 80, 325);
+    text("Green Electric", 330, 325);
+    text("Graves Stove Kettle", 550, 325);
+    // Put Kettle images above each button:
+    image(kettle1Img, 65, 125, 190, 190);
+    image(kettle2Img, 300, 125, 210, 210);
+    image(kettle3Img, 550, 125, 190, 190);
 
+    // if button not pressed, allow user to switch between highlighted kettle options
+    if (Number(buttonState) === 0) {
         // if highlighted kettle is 2 (default), highlight the center kettle option (using > < symbols on either side of the option)
         if (highlightedKettle === 2) {
             fill("#134611");
@@ -171,54 +168,124 @@ function chooseKettlePage() {
             } else if (Number(xVal) > 525) { // if joystick right, goto right kettle, change highlighted kettle variable to 3
                 highlightedKettle = 3;
             }
-            if (Number(yVal) > 525) { // if joystick down, goto start task button, change highlighted kettle variable to 4
-                highlightedKettle = 4;
-            }
         } else if (highlightedKettle === 1) { // if highlighted kettle is 1, highlight the left kettle option
             fill("#134611");
-            text(">", 50, 320);
-            text("<", 250, 320);
+            text(">", 45, 325);
+            text("<", 245, 325);
             if (Number(xVal) > 525) { // if joystick right, goto center kettle, change highlighted kettle variable to 2
                 highlightedKettle = 2;
             }
-            if (Number(yVal) > 525) { // if joystick down, goto start task button, change highlighted kettle variable to 4
-                highlightedKettle = 4;
-            }
         } else if (highlightedKettle === 3) { // if highlighted kettle is 3, highlight the right kettle option
             fill("#134611");
-            text(">", 550, 320);
-            text("<", 750, 320);
+            text(">", 515, 325);
+            text("<", 755, 325);
             if (Number(xVal) < 500) { // if joystick left, goto center kettle, change highlighted kettle variable to 2
                 highlightedKettle = 2;
             }
-            if (Number(yVal) > 525) { // if joystick down, goto start task button, change highlighted kettle variable to 4
-                highlightedKettle = 4;
-            }
-        } else if (highlightedKettle === 4) { // if highlighted kettle is 4, highlight the 'start task' button
-            fill("#134611");
-            text(">", 500, 450);
-            text("<", 750, 450);
-            // if joystick up, goto center kettle, change highlighted kettle variable to 2
-            if (Number(yVal) < 510) {
-                highlightedKettle = 2;
-            }
-        }
+        } 
     } else if (Number(buttonState) === 1) {
-        // if highlighted kettle is 1, change the look of the button to make it selected, and set the kettle choice variable to 1
+        // if highlighted kettle is 1, set the kettle choice variable to 1, move to next stage
         if (highlightedKettle === 1) {
-            kettleChoice = 1;
-        } else if (highlightedKettle === 2) { // if highlighted kettle is 2, change the look of the button to make it selected, and set the kettle choice variable to 2
-            rect(350, 320, 100, 40); // redraw center kettle button to make it look selected
+            kettleChoice = 1; // This will be used in stage 4
+            stage = 3; // move to next stage
+        } else if (highlightedKettle === 2) { // if highlighted kettle is 2, set the kettle choice variable to 2, move to next stage
             kettleChoice = 2;
-        } else if (highlightedKettle === 3) { // if highlighted kettle is 3, change the look of the button to make it selected, and set the kettle choice variable to 3
+            stage = 3; // move to next stage
+        } else if (highlightedKettle === 3) { // if highlighted kettle is 3, set the kettle choice variable to 3, move to next stage
             kettleChoice = 3;
-        } else if (highlightedKettle === 4) { // if highlighted kettle is 4 (start task), move to the next stage
             stage = 3; // move to next stage
         }
     }
 }  
 
+function startFirstTask() {
+    let str = port.readUntil("\n"); // Read from the port until the newline
+    if (str.length == 0) return; // If we didn't read anything, return.
 
+    // grab all values and put them in an array of variables
+    let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // display the selected kettle and other options from stage 2:
+    background("#DEE9D8");
+    fill("#134611");
+    textAlign(CENTER);
+    textFont(jersey25); // change font to jersey25 font
+    textSize(40);
+    if (kettleChoice === 1) {
+        text("You have chosen the Classic Electric kettle!", 400, 50);
+        // draw the button with opposite colors to make it look selected
+        stroke("#355834");
+        strokeWeight(2);
+        fill("#DEE9D8");
+        rect(65, 315, 170, 40);
+        strokeWeight(0);
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Classic Electric", 80, 325);
+        // Label the buttons:   
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Green Electric", 330, 325);
+        text("Graves Stove Kettle", 550, 325);
+    } else if (kettleChoice === 2) {
+        text("You have chosen the Green Electric kettle!", 400, 50);
+        // draw the button with opposite colors to make it look selected
+        stroke("#355834");
+        strokeWeight(2);
+        fill("#DEE9D8");
+        rect(320, 315, 150, 40);
+        strokeWeight(0);
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Green Electric", 330, 325);
+        // Label the buttons:   
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Classic Electric", 80, 325);
+        text("Graves Stove Kettle", 550, 325);
+    } else if (kettleChoice === 3) {
+        text("You have chosen the Graves Stove Kettle!", 400, 50);
+        // draw the button with opposite colors to make it look selected
+        stroke("#355834");
+        strokeWeight(2);
+        fill("#DEE9D8");
+        rect(535, 315, 210, 40); // right kettle option
+        strokeWeight(0);
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Graves Stove Kettle", 550, 325);
+        // Label the buttons:   
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Classic Electric", 80, 325);
+        text("Green Electric", 330, 325);
+    }
+    // Put Kettle images above each button:
+    image(kettle1Img, 65, 125, 190, 190);
+    image(kettle2Img, 300, 125, 210, 210);
+    image(kettle3Img, 550, 125, 190, 190);
+    // make start task button at the bottom of the page:
+    strokeWeight(0);
+    fill("#134611");
+    rect(480, 400, 270, 40); 
+    fill("#DEE9D8");
+    textSize(24);
+    text("Start First Homework Task!", 490, 410);
+    // highlight the start ask button so user knows to move onto the next task: 
+    fill("#134611");
+    text(">", 455, 410);
+    text("<", 760, 410);
+
+    if (Number(buttonState) === 1) {
+        stage = 0; // move to next stage
+    }
+}
 
 
 
