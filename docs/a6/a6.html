@@ -106,110 +106,19 @@ void loop() {
 
     // wait 200 miliseconds so that multiple button pushses dont happen back to back
     delay(100);
-}
-        </code>
-      </pre>
-      <br/>
-      <h2>P5.JS Code</h2>
-        <p> The following code was written for this assignment using p5.js: </p>
-            <pre>
-                <code>
-                    
-    </div>
-    <div class="animation">
-      <h2>Video</h2>
-      <p>You can access a video of my project here: <a href="https://www.youtube.com/watch?v=fAEzNgHhOuY">https://www.youtube.com/watch?v=fAEzNgHhOuY</a></p>
-      <p> 
-        If I were to complete this assignment again, I would have powered the entire LED strip using the 12V power supply rather than 45 branches.
-      </p>
-    </div>
-    <div class="questions">
-      <h2>Questions</h2>
-      <h3>
-        Read the text on your mosfet to see which one you have. For your mosfet, what is the absolute maximum amount of current between pins 2 and 3?
-      </h3>
-        <p>
-          I have the IRLZ44N transitor. The absolute maximum amount of current between pins 2 and 3 for the IRLZ44N MOSFET transistor is 47A. This can be seen on the datasheet
-          under the "Absolute Maximum Ratings" section, under "Continuous Drain Current, Vgs at 10V". 
-        </p>
-        <br/>
-        <h3>
-          2: Draw a schematic for a circuit with using at least your arduino, a DC motor, and a flyback diode. 
-          Find parts with datasheets you could use for each of these schematic components.
-        </h3>
-        <div class="imagecrop">
-          <img src="a5_flyback-45.jpg" alt="Schematic of a flyback diode circuit."/>
-        </div>
-        <br/>
-        <div class="animation">
-          <p>
-              The schematic above shows a circuit with a DC motor and a flyback diode. <br/>
-              A datasheet for a 3 - 6V DC motor can be found here: <a href="https://cdn-shop.adafruit.com/product-files/711/P711+C26-001+datasheet.pdf">link to DC motor datasheet</a><br/>
-              A datasheet for the flyback diode can be found here: <a href="https://cdn-shop.adafruit.com/datasheets/1N4001-D.PDF">link to flyback diode datasheet</a>
-          </p>
-        </div>
-
-      </div>
-        <br/>
-        <h3>
-          3: Here is the datasheet for the L293D chip: https://www.ti.com/product/L293D. 
-          Draw a schematic using at least your arduino, this chip, and two motors. Write (pseudo) code that shows how you would move the motors both forward, 
-          both back, then one forward one back, and one back then forward.        
-        </h3>
-        <p> 
-            Schematic:
-        </p>
-        <div class="imagecrop">
-          <img src="a5_l293d-46.jpg" alt="Schematic of an L293D chip circuit."/>
-        </div>
-        <br/>
-        <p>
-            Pseudo code:
-        </p>
-        <pre>
-        <code>
-void setup() {
-  pinMode(7, OUTPUT); // Motor 1 enable pin 1 on L293D
-  pinMode(6, OUTPUT); // Motor 1 direction pin 2 on L293D
-  pinMode(5, OUTPUT); // Motor 1 direction pin 7 on L293D
-  pinMode(11, OUTPUT); // Motor 2 enable pin 9 on L293D
-  pinMode(10, OUTPUT); // Motor 2 direction pin 10 on L293D
-  pinMode(9, OUTPUT); // Motor 2 direction pin 15 on L293D
-
-  DigitalWrite(7,HIGH);
-  DigitalWrite(11,HIGH); 
-}
-
-void loop() {
-  digitalWrite(6,HIGH);
-  digitalWrite(5,LOW); 
-  digitalWrite(10,HIGH); 
-  digitalWrite(9,LOW); 
-  delay(100);
-  digitalWrite(6,LOW); 
-  digitalWrite(5,HIGH); 
-  digitalWrite(10,LOW); 
-  digitalWrite(9,HIGH); 
-  delay(100);
-  // forward then back
-  digitalWrite(6,HIGH); 
-  digitalWrite(5,LOW); 
-  digitalWrite(10,LOW); 
-  digitalWrite(9,HIGH); 
-  delay(100);
-  // back then forward
-  digitalWrite(6,LOW); 
-  digitalWrite(5,HIGH); 
-  digitalWrite(10,HIGH); 
-  digitalWrite(9,LOW);
-  delay(100);
 }</code>
-        </pre>
-        <h3>
-          Did you use AI tools in completing this assignment? If yes, please provide details on how/when, 
-          as well as a brief reflection. If no, you can either leave this question blank, or provide other information if you'd like.
-        </h3>
-        <p> No, I did not use AI tools in completing this assignment.</p>
+      </pre>
+      </div>
+      <br/>
+    <div class="animation">
+      <h2>P5.JS Code</h2>
+        <p> A link to the P5.JS code for this assignment can be found here: <a href="https://github.com/darbyuw/hcde439/blob/main/docs/a6/a6.js">https://github.com/darbyuw/hcde439/blob/main/docs/a6/a6.js</a>.</p>
+        <br />
+      <h2>Video</h2>
+        <p>You can access a video of my project here: <a href="https://youtu.be/lWsW5XKrVow">https://youtu.be/lWsW5XKrVow</a></p>
+        <p> The beginnging of the video shows me interacting with the touch pad to change the brightness of the LED, and the end of the video
+            shows me using the joystick to select different options on the webpage and using the button to move to different pages within the webpage. </p>
+        </p>
     </div>
   </body>
 </html>
