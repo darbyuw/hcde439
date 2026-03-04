@@ -12,106 +12,109 @@
     <h1>Darby's A6 Web I/O Assignment</h1>
     <div class="a1header">
       <p>
-        For this assignment I was tasked with creating a schematic, circuit, and code that uses a transistor to control load power separate from logic power. 
-        The requirements were to use analogWrite(), a high-load output device, and an input sensor that uses a library.
+        For this assignment I was tasked with creating a webpage that interacts with my Arduino.
       </p>
       <p> 
-        I created a circuit that gathers distance information from the ultrasonic distance sensor, and uses that information to change the brightness of a strip of white LED lights. 
-        When the ultrasonic sensor senses something close to the sensor, a lower brightness (closer to 0) will be written to the LEDs, and the lights will be dimmer.
-        When the ultrasonic sensor senses something far from the sensor, a higher brightness (closer to 255) will be written to the LEDs, making them brighter. 
-        It updates every 500 miliseconds, to write a new brightness.
-        The strip of LEDs contains 45 branches, each branch has three white LEDs and a 180 Ohm resistor. I used a MOSFET transistor to control the power to the LED strip, and I used a 12V wall adaptor to power the LED strip.
+        I created a circuit that gathers touch information from a joystick and uses that information to change the webpage to select different options. 
+        The circuit also gathers touch information with a button. This button allows you to move to different pages within the webpage. 
+        This circuit also has an LED that takes in information from the mouse and changes brightness based on the x position of the mouse, when the mouse moves.
       </p>
-      <div class="animation">
-        <p>  
-          I initially wanted to use the LCD display as I had done last week, but since the requirements for this assignment stated a sensor that used a library, I had to switch ideas. 
-          I decided to use the LED strip with a distance sensor. I struggled with connecting the power supply corrently, and completely built a different circuit that used a DC motor, before realizing that 
-          the DC motor does not use a MOSFET transistor. So I switched back to troubleshooting my LED strip with distance sensor. 
-        </p>
-      </div>
     </div>
     <div class="schematic">
       <h2>Schematic</h2>
       <div class="imagecrop">
-        <img src="a5_Schematic.jpg" alt= "A schematic of the circuit."/>
+        <img src="schematic-48.jpg" alt= "A schematic of the circuit."/>
       </div>
       <p> 
-        This is a schematic of the circuit that I built for this project. The ultrasonic sensor is connected to the 5v, ground, and pins 12 and 13 on the Arduino. 
-        The LED strip is connected to the 12V power supply, ground, and the drain of the MOSFET transistor. The source of the MOSFET transistor is 
-        connected to ground, and the gate is connected to pin 9 on the Arduino and to a 10k Ohm reisitor. The 10k Ohm resistor is also connected to ground, creating a pull-down resistor. 
-        This ensures that any voltage that is not being written to the gate of the transistor will be sent to ground, which keeps the LEDs off when we want them to be off.
-      </p>
-      <img src="a5_calculations.jpg" alt= "Caluations of the resistance needed and voltages at crutial points."/>
-      <p> These are the calculations that I used to determine the voltages and currents at crucial spots in the circuit. I calculated that there would be 10mA of current flowwing 
-        across each branch of the LED strip, and since there are 45 branches, there would be 450mA of current flowing through the MOSFET transistor (from drain to ground). 
-        I also calculated that the voltage drop across the 180 Ohm resistor in each branch would be 1.8V. 
-        This means that the voltage drop across each branch would be 10.2V, which is less than the 12V power supply, so this circuit should work without any issues. 
-        The gate of the transistor will receive a voltage of 0 or 5V. 
-      </p>
-      <p>
-        Since I chose to only power 45 branches, with a total of 450mA, this is way less than the maximum current that the MOSFET transistor can handle, which is 47A. A transistor was 
-        needed for this circuit because the current flowing through the LED strip (450mA) is much higher than the current that can flow through an Arduino pin, which is 40mA. Using 
-        an external power supply with a transistor allows us to power the LED strip without damaging the Arduino.
+        This is a schematic of the circuit that I built for this project. The joystick is connected to the A0 and A1 analog in pins.
+        I decided to use a 220 Ohm resistor for the LED because I calculated that a 150 Ohm resistance was needed for a red LED, so I used a 220 Ohm resistor to provide a safe current flow. 
+        I also determined that a 10 Kili Ohm resistor was needed for the button because I used a pull-down configureation for the 
+        button and 10K Ohm would provide a safe current flow when the button is pressed. 
       </p>
       <h2>Circuit</h2>
-      <img src="a5_far.jpeg" alt= "A far away image of a breadboard with an LED strip connected to an Arduino."/>
       <div class="images">
-         <img src="a5_close.jpeg" alt= "A close up image of a breadboard with an LED strip."/>
-         <img src="a5_closer.jpeg" alt= "A close up image of an ultrasonic distance sensor connected to a breadboard."/>
+         <img src="a6_close.jpeg" alt= "A close up image of a breadboard with a button and LED."/>
+         <img src="a6_far.jpeg" alt= "A far away image of a joystick connected to a breadboard."/>
       </div>
       <p> 
         This is a picture of the circuit that I built on a breadboard. 
-        I connected the barrel jack converter to the 12V power supply and to the positive strip on the breadboard, and then I connected the positive of the LED strip to the same positive strip on the breadboard.
-        I connected the negative of the LED strip to the drain of the MOSFET transistor, and then I connected the source of the MOSFET transistor to ground. 
-        I connected the gate of the MOSFET transistor to pin 9 on the Arduino and to a 10k Ohm resistor, and then I connected the other end of the 10k Ohm resistor to ground. 
-        Finally, I connected the ultrasonic sensor to 5V, ground, and pins 12 and 13 on the Arduino. This prevented any overheating issues with the Arduino. 
+        I connected the LED to pin 5 so that I could control its brightness and I connected the button to pin 2. 
+        I connected the joystick to the A0 and A1 analog in pins so that I could read the x and y position of the joystick.
     </p>
     </div>
     <div class="code">
-      <h2>Code</h2>
+        <br/>
+      <h2>Ardino Code</h2>
       <p> The following code was written for this assignment using the Arduino IDE: </p>
       <pre>
         <code>
-// Include the HCSR04 library to use the distance sensor
-#include &ltHCSR04.h&gt
-// initialize the distanceSensor object at pin 13 and 12
-UltraSonicDistanceSensor distanceSensor(13, 12);  // Initialize sensor that uses digital pins 13 and 12.
-// Initialize a variable for the transistor at pin 9
-int transistorPin = 9;
-// Initialize a variable for the starting distance
-int distance = 0;
-// Iniitalize a variable for the distance to be mapped
-int distanceMapped = 0;
+// initialize button pin
+const int BUTTON_PIN = 2;
+// Initialize a variable for the analog input pin for x values
+int x = A0;
+// Initialize a variable for the analog input pin for y values
+int y = A1;
+// Initialize a variable for the joystick x values 
+int xVal = 0;
+// Initialize a variable for the joystick y values
+int yVal = 0;
+// Initialize variable for keeping track of the button status:
+int currBtnState = 0;  
+// Initialize variable for keeping track of the previous button status:
+int prevBtnState = currBtnState;
+// Initialize variable for LED pin
+int led = 5;
 
-void setup () {
-    // We initialize serial connection to print values from sensor
-    Serial.begin(9600);  
-    // Set up the transistor pin to be an Output
-    pinMode(transistorPin, OUTPUT);
+void setup() {
+    // start serial communication at 9600 baud rate
+    Serial.begin(9600);
+    // set the button pin as an input
+    pinMode(BUTTON_PIN, INPUT);
+    // set the LED pin as output:
+    pinMode(led, OUTPUT);
 }
 
-void loop () {
-    // check distnace with the distance sensor
-    distance = distanceSensor.measureDistanceCm();
-    // print the distance in centimeters:
-    Serial.println("measured distance:");
-    // print the distance variable in centimeters:
-    Serial.println(distance);
-    // Keep the readings between 0 and 25 cm to test easy small distances
-    distance = constrain(distance, 0, 25);
-    // Map the distance to be from 0 to 255 so that the LEDs can fade in brightness
-    distanceMapped = map(distance, 0, 25, 0, 255);
-    // Print the mapped distance 
-    Serial.println("mapped distance:");
-    // Print the mapped distance variable
-    Serial.println(distanceMapped);
-    // write the distance to to the transistor to change the brightness of the LEDs
-    analogWrite(transistorPin, distanceMapped);
-    // wait 500 miliseconds before checking the distance again
-    delay(500);
+void loop() {
+    // Read the state of the push button value:
+    currBtnState = digitalRead(BUTTON_PIN);
+    // Check if the push button is pressed:
+    Serial.print(currBtnState);
+    // Send a comma between each value
+    Serial.print(",");
+    // Read in the x value from the joystick
+    xVal = analogRead(x);
+    // Read in the y value from the joystick
+    yVal = analogRead(y);
+    // Print the x value to the serial monitor
+    Serial.print(xVal);
+    // Send a comma between each value
+    Serial.print(",");
+    // Print the y value to the serial monitor
+    Serial.println(yVal);
+
+    // Check if there is data to be read:
+    if (Serial.available() > 0) {
+        // read from the port, constrain to avoid outliers:
+        int inByte = map(Serial.read(), 0, 510, 0, 255);
+        // write a brightness to the LED based on what was received:
+        analogWrite(led, inByte);
+    }
+    
+
+    // reset the previous stored state of the button to the current state:
+    prevBtnState = currBtnState;
+
+    // wait 200 miliseconds so that multiple button pushses dont happen back to back
+    delay(100);
 }
         </code>
       </pre>
+      <br/>
+      <h2>P5.JS Code</h2>
+        <p> The following code was written for this assignment using p5.js: </p>
+            <pre>
+                <code>
+                    
     </div>
     <div class="animation">
       <h2>Video</h2>

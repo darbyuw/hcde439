@@ -68,18 +68,18 @@ function startPage() {
     // If the button is not pressed, stay on the start page
     if (Number(buttonState) === 0) {
         background("#BACDB0");
-        image(logoImg, 300, 50, 446.48, 144.16); // draw logo at top of the page
+        image(logoImg, 150, 100, 446.48, 144.16); // draw logo at top of the page
         // create a button:
         fill("#134611");
-        rect(300, 275, 100, 40); // draw button
+        rect(300, 300, 150, 40); // draw button
         textSize(24);
         fill("#DEE9D8");
         textAlign(CENTER);
         textFont(jersey25); // change font to jersey25 font
-        text("Start Game", 350, 310);
+        text("Start Game", 375, 326);
         fill("#134611");
-        text(">", 290, 310); // draw ">" to indicate the button can be pressed
-        text("<", 410, 310);
+        text(">", 280, 326); // draw ">" to indicate the button can be pressed
+        text("<", 470, 326);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 1; // if so, move to next stage
@@ -304,6 +304,14 @@ function centerCanvas() {
 
 function windowResized() {
     centerCanvas();
+}
+
+// ------------------ WEB --> ARDUINO FUNCTIONS ------------------
+
+function mouseMoved() {
+  if (mouseX > 0 && mouseX < 510) {
+    port.write(mouseX); // Send mouse x position to arduino when mouse is moved
+  }
 }
 
 
