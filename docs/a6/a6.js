@@ -1,6 +1,4 @@
 const BAUD_RATE = 9600; // This should match the baud rate in your Arduino sketch
-const MIN_DIAMETER = 10;
-const MAX_DIAMETER = 40;
 
 let port, connectBtn; // Declare global variables
 let bgImg, startScreen, logoImg;
