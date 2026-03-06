@@ -36,7 +36,7 @@ function draw() {
     } else if (stage === 2) {
         chooseKettlePage();
     } else if (stage === 3) {
-        startFirstTask();
+        kettleChosen();
     } else if (stage === 4) {
         taskOnePage();
     } else if (stage === 5) {
@@ -72,12 +72,12 @@ function startPage() {
         rect(300, 300, 150, 40); // draw button
         textSize(24);
         fill("#DEE9D8");
-        textAlign(CENTER);
+        textAlign(CENTER, CENTER);
         textFont(jersey25); // change font to jersey25 font
-        text("Start Game", 375, 326);
+        text("Start Game", 375, 319);
         fill("#134611");
-        text(">", 280, 326); // draw ">" to indicate the button can be pressed
-        text("<", 470, 326);
+        text(">", 280, 319); // draw ">" to indicate the button can be pressed
+        text("<", 470, 319);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 1; // if so, move to next stage
@@ -102,21 +102,22 @@ function instructionsPage() {
         textAlign(LEFT);
         text("Instructions", 75, 100);
         textSize(20);
-        text("Before starting, remove any distractions, and put away your phone.", 75, 150);
-        text("Break up your homework into four tasks. This could be one assignment split into smaller parts, or four separate assignments.", 75, 185, 650);
-        text("Each task will be paired with a step while making a matcha latte. You will move onto the next step in the game when you finish your homework task!", 75, 245, 650);
+        text("Before starting, remove any distractions, and put away your phone.", 75, 145);
+        text("Break up your homework into four tasks. This could be one assignment split into smaller parts, or four separate assignments.", 75, 187, 650);
+        text("Each task will be paired with a step while making a matcha latte. You will move onto the next step in the game when you finish your homework task!", 75, 244, 650);
         text("You will get to customize your matcha as you go, at the end you will have a customized matcha latte!", 75, 305, 650);
-        text("Grab a study drink and lets get started by choosing our first item!", 75, 365);
+        text("Grab a study drink and lets get started by choosing our first item!", 75, 352);
         fill("#134611");
-        rect(300, 390, 200, 50); // draw button
+        // draw start button:
+        rect(350, 390, 150, 40); 
         textSize(24);
         fill("#DEE9D8");
-        textAlign(CENTER);
+        textAlign(CENTER, CENTER);
         textFont(jersey25); // change font to jersey25 font
-        text("Start", 400, 420);
+        text("Start", 425, 408);
         fill("#134611");
-        text(">", 280, 420); // draw ">" to indicate the button can be pressed
-        text("<", 520, 420);
+        text(">", 335, 410); // draw ">" to indicate the button can be pressed
+        text("<", 515, 410);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 2; // if so, move to next stage
@@ -196,7 +197,7 @@ function chooseKettlePage() {
     }
 }  
 
-function startFirstTask() {
+function kettleChosen() {
     let str = port.readUntil("\n"); // Read from the port until the newline
     if (str.length == 0) return; // If we didn't read anything, return.
 
@@ -281,12 +282,92 @@ function startFirstTask() {
     text("<", 760, 410);
 
     if (Number(buttonState) === 1) {
-        stage = 0; // move to next stage
+        stage = 4; // move to next stage
     }
 }
 
+function taskOnePage() {
+    let str = port.readUntil("\n"); // Read from the port until the newline
+    if (str.length == 0) return; // If we didn't read anything, return.
+
+    // grab all values and put them in an array of variables
+    let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // TODO: HOW TO CHANGE TIME TO COUNT FROM THIS STAGE ONLY?? 
+        // HOW CAN I COUNT FROM JUST THIS STAGE??
+    // count the time elapsed since displaying this page:
+    let timeElapsed = Math.floor(millis() / 1000); // time elapsed in seconds
+    // convert the time elasped into a clock format (mm:ss):
+    let minutes = Math.floor(timeElapsed / 60);
+    let seconds = timeElapsed % 60;
+    let timeElapsedFormatted = nf(minutes, 2) + ":" + nf(seconds, 2);
+
+    // if button not pressed, display the chosen kettle
+    if (Number(buttonState) === 0) {
+        background("#DEE9D8");
+        fill("#134611");
+        // position text based on the center of the text box:
+        textAlign(LEFT);
+        textFont(jersey25);
+        textSize(24);
+        // display the amount of time that has elapsed since displaying this page:
+        text("Time Elapsed: " + timeElapsedFormatted, 25, 475);
+        // make first text box:
+        fill("#BACDB0");
+        rect(50, 50, 250, 100);
+        fill("#134611");
+        text("Complete your first homework task while the water boils!", 60, 60, 225);
+        // make second text box:
+        fill("#BACDB0");
+        rect(500, 350, 280, 80);
+        fill("#134611");
+        textSize(18);
+        text("Press the button when you have completed your task. You will pick another item next.", 515, 360, 250);
+        // make Ive finished button at the bottom of the page:
+        strokeWeight(0);
+        fill("#134611");
+        rect(600, 450, 150, 40); 
+        textSize(24);
+        fill("#DEE9D8");
+        text("I've Finished!", 610, 460);
+        // highlight the button so user knows to move onto the next task: 
+        fill("#134611");
+        text(">", 580, 460);
+        text("<", 760, 460);
+        // Display the chosen kettle: 
+        if (kettleChoice === 1) {
+            image(kettle1Img, 250, 125, 300, 300);
+        } else if (kettleChoice === 2) {
+            image(kettle2Img, 250, 125, 300, 300);
+        } else if (kettleChoice === 3) {
+            image(kettle3Img, 250, 125, 300, 300);
+        }
+    } else if (Number(buttonState) === 1) {
+        stage = 5; // move to next stage
+    }
 
 
+}
+
+function chooseBowlPage() {
+
+}
+
+function taskTwoPage() {
+
+} 
+
+function taskThreePage() {
+}
+
+function chooseCupPage() {
+}
+
+function taskFourPage() {
+}
+
+function endPage() {
+}
 
 
 
@@ -319,7 +400,7 @@ function setupSerial() {
 
   // create a connect button
   connectBtn = createButton("Connect to Arduino");
-  connectBtn.position(5, 5); // Position the button in the top left of the screen.
+  connectBtn.position(5, 5); // Position the button in the center of the screen.
   connectBtn.mouseClicked(onConnectButtonClicked); // When the button is clicked, run the onConnectButtonClicked function
 }
 
