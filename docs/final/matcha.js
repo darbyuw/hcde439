@@ -10,7 +10,8 @@ let currentHighlighted = 2; // default to center kettle option being highlighted
 let stageStartTime = 0;
 // keep track of the user's bowl:
 let bowlChoice = 2;
-
+// keep track of time elapsed during tasks:
+let totalTime = 0;
 var jersey25;
 
 function preload() {
@@ -23,6 +24,12 @@ function preload() {
     bowlImg2 = loadImage("./assets/bubble_bowl.png");
     bowlImg3 = loadImage("./assets/flower_bowl.png");
     whisk = loadImage("./assets/whisk.gif");
+    water = loadImage("./assets/water.png");
+    soakWhisk = loadImage("./assets/soak_whisk.png");
+    sift = loadImage("./assets/sift.png");
+    cupImg1 = loadImage("./assets/cup_ice.png");
+    cupImg2 = loadImage("./assets/hot_mug.png");
+    cupImg3 = loadImage("./assets/jar_ice.png");
 }
 
 function setup() {
@@ -314,6 +321,7 @@ function taskOnePage() {
     let seconds = timeElapsed % 60;
 
     let timeElapsedFormatted = nf(minutes, 2) + ":" + nf(seconds, 2);    
+    totalTime = timeElapsedFormatted;
 
     // if button not pressed, display the chosen kettle
     if (Number(buttonState) === 0) {
@@ -367,13 +375,18 @@ function chooseBowlPage() {
     // grab all values and put them in an array of variables
     let [buttonState, xVal, yVal] = str.trim().split(",");
 
+    // keep track of the previous x val, if in center and previous is the same as current, 
+    // then wait until x val is in center. ?? 
+
+    
+    // display bowls weather or not the button is pressed:
+    background("#DEE9D8");
     // Make textbox:
     fill("#BACDB0");
     rect(25, 25, 250, 100);
     fill("#134611");
-    text("Woo hoo! You finished your first task in " + "timeElapsedFormatted" + " and the water is now boiling!", 35, 35, 225);
-    // display bowls weather or not the button is pressed:
-    background("#DEE9D8");
+    text("Woo hoo! You finished your first task in " + totalTime + " and the water is now boiling!", 35, 35, 225);
+    // Make title
     fill("#134611");
     textAlign(CENTER);
     textFont(jersey25); 
@@ -547,6 +560,7 @@ function taskTwoPage() {
     let seconds = timeElapsed % 60;
 
     let timeElapsedFormatted = nf(minutes, 2) + ":" + nf(seconds, 2);    
+    totalTime = timeElapsedFormatted;
 
     // if button not pressed, display the chosen bowl
     if (Number(buttonState) === 0) {
@@ -577,12 +591,16 @@ function taskTwoPage() {
         text("<", 760, 460);
         // Display the chosen bowl: 
         if (bowlChoice === 1) {
-            image(bowlImg2, 230, 150, 380, 380);
+            image(bowlImg1, 230, 150, 380, 380);
         } else if (bowlChoice === 2) {
             image(bowlImg2, 230, 150, 380, 380);
         } else if (bowlChoice === 3) {
             image(bowlImg3, 230, 150, 380, 380);
         }
+        // insert sift above bowl
+        image(sift, 230, 70, 350, 350);
+        // insert soaking whisk image to the left
+        image(soakWhisk, 10, 125, 250, 250);
     } else if (Number(buttonState) === 1) {
         stage = 8; // move to next stage
     }
@@ -599,28 +617,29 @@ function finishTaskTwo() {
     if (Number(buttonState) === 0) {
         background("#DEE9D8");
         fill("#BACDB0");
-        rect(200, 150, 400, 200); // draw box for instructions
+        rect(200, 140, 400, 200); // draw box for instructions
         fill("#134611");
         textFont(jersey25); 
         textAlign(LEFT);
         textSize(20);
-        text("Great job finishing a second task! You finished your second task in" + "timeElapsed", 210, 160, 580);
-        text("Now you're ready to add the hot water to the matcha powder and start whisking,", 210, 187, 580);
-        text("Get ready to complete your third homework task!", 210, 220, 580);
+        text("Great job finishing a second task! You finished your second task in " + totalTime + ".", 210, 170, 390);
+        text("Now you're ready to add the hot water to the matcha powder and start whisking.", 210, 230, 400);
+        text("Get ready to complete your third homework task!", 210, 280, 400);
         fill("#134611");
         // draw start button:
-        rect(350, 390, 200, 40); 
+        rect(280, 390, 280, 40); 
         textSize(24);
         fill("#DEE9D8");
         textAlign(CENTER, CENTER);
         textFont(jersey25); // change font to jersey25 font
-        text("Start third homework task", 450, 408);
+        text("Start third homework task", 415, 408);
         fill("#134611");
-        text(">", 335, 410); // draw ">" to indicate the button can be pressed
-        text("<", 560, 410);
+        text(">", 265, 410); // draw ">" to indicate the button can be pressed
+        text("<", 570, 410);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 9; // if so, move to next stage
+        stageStartTime = millis(); // store the time when moving to stage 9
     }
 }
 
@@ -638,6 +657,7 @@ function taskThreePage() {
     let seconds = timeElapsed % 60;
 
     let timeElapsedFormatted = nf(minutes, 2) + ":" + nf(seconds, 2);    
+    totalTime = timeElapsedFormatted;
 
     // if button not pressed, display the chosen bowl
     if (Number(buttonState) === 0) {
@@ -651,10 +671,249 @@ function taskThreePage() {
         text("Time Elapsed: " + timeElapsedFormatted, 25, 470);
         // make second text box:
         fill("#BACDB0");
-        rect(620, 130, 125, 170);
+        rect(290, 10, 350, 60);
         fill("#134611");
         textSize(18);
-        text("While the matcha is whisking, complete your next homework task.", 625, 135, 115);
+        text("While the matcha is whisking, complete your next homework task.", 300, 40, 340);
+        // make Ive finished button at the bottom of the page:
+        strokeWeight(0);
+        fill("#134611");
+        rect(600, 450, 150, 40); 
+        textSize(24);
+        fill("#DEE9D8");
+        text("I've Finished!", 610, 470);
+        // highlight the button so user knows to move onto the next task: 
+        fill("#134611");
+        text(">", 580, 470);
+        text("<", 760, 470);
+        // Display the chosen bowl: 
+        if (bowlChoice === 1) {
+            image(bowlImg1, 310, 130, 380, 380);
+            // insert whisk gif into bowl
+            image(whisk, 290, 70, 270, 270);
+        } else if (bowlChoice === 2) {
+            image(bowlImg2, 230, 150, 370, 370);
+            // insert whisk gif into bowl
+            image(whisk, 260, 100, 250, 250);
+        } else if (bowlChoice === 3) {
+            image(bowlImg3, 270, 130, 380, 380);
+            // insert whisk gif into bowl
+            image(whisk, 290, 70, 270, 270);
+        }
+
+        // insert hot water on the side
+        image(water, 10, 100, 250, 250);
+    } else if (Number(buttonState) === 1) {
+        stage = 10; // move to next stage
+    }
+}
+
+function chooseCupPage() {
+    let str = port.readUntil("\n"); // Read from the port until the newline
+    if (str.length == 0) return; // If we didn't read anything, return.
+
+    // grab all values and put them in an array of variables
+    let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // keep track of the previous x val, if in center and previous is the same as current, 
+    // then wait until x val is in center. ?? 
+
+   
+    // display bowls weather or not the button is pressed:
+    background("#DEE9D8");
+     // Make textbox:
+    fill("#BACDB0");
+    rect(5, 5, 250, 100);
+    fill("#134611");
+    textSize(18);
+    textAlign(LEFT);
+    text("Woo hoo! You finished your third task in " + totalTime + " and the matcha has been whisked.", 10, 10, 225);
+    fill("#134611");
+    textAlign(CENTER);
+    textFont(jersey25); 
+    textSize(40);
+    text("Pick a cup to drink your matcha in!", 400, 50);
+    // draw three rectangles for the buttons of the three kettles:
+    rect(65, 315, 190, 40); // left option
+    rect(320, 315, 160, 40); // center option
+    rect(535, 315, 175, 40); // right option
+    fill("#DEE9D8");
+    textAlign(LEFT, TOP);
+    textSize(24);
+    // Label the buttons: 
+    text("Glass with Ice", 80, 325);
+    text("Hot Mug", 330, 325);
+    text("Jar with Ice", 550, 325);
+    // Put bowl images above each button:
+    image(cupImg1, 65, 125, 190, 190);
+    image(cupImg2, 300, 125, 190, 190);
+    image(cupImg3, 550, 125, 190, 190);
+
+    // if button not pressed, allow user to switch between highlighted options
+    if (Number(buttonState) === 0) {
+        // if highlighted is 2 (default), highlight the center option (using > < symbols on either side of the option)
+        if (currentHighlighted === 2) {
+            fill("#134611");
+            text(">", 300, 325);
+            text("<", 485, 325);
+            // if joystick left, goto left, change highlighted variable to 1
+            if (Number(xVal) < 500) {
+                currentHighlighted = 1;
+            } else if (Number(xVal) > 525) { // if joystick right, goto right, change highlighted variable to 3
+                currentHighlighted = 3;
+            }
+        } else if (currentHighlighted === 1) { // if highlighted is 1, highlight the left option
+            fill("#134611");
+            text(">", 45, 325);
+            text("<", 265, 325);
+            if (Number(xVal) > 525) { // if joystick right, goto center, change highlighted variable to 2
+                currentHighlighted = 2;
+            }
+        } else if (currentHighlighted === 3) { // if highlighted is 3, highlight the right option
+            fill("#134611");
+            text(">", 515, 325);
+            text("<", 725, 325);
+            if (Number(xVal) < 500) { // if joystick left, goto center, change highlighted variable to 2
+                currentHighlighted = 2;
+            }
+        } 
+    } else if (Number(buttonState) === 1) {
+        // if highlighted is 1, set the choice variable to 1, move to next stage
+        if (currentHighlighted === 1) {
+            cupChoice = 1; 
+            stage = 11; // move to next stage
+        } else if (currentHighlighted === 2) { // if highlighted is 2, set the choice variable to 2, move to next stage
+            cupChoice = 2;
+            stage = 11; // move to next stage
+        } else if (currentHighlighted === 3) { // if highlighted is 3, set the choice variable to 3, move to next stage
+            cupChoice = 3;
+            stage = 11; // move to next stage
+        }
+    }
+}
+
+function cupChosen() {
+    let str = port.readUntil("\n"); // Read from the port until the newline
+    if (str.length == 0) return; // If we didn't read anything, return.
+
+    // grab all values and put them in an array of variables
+    let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // Display the selected bowl and other options:
+    background("#DEE9D8");
+    fill("#134611");
+    textAlign(CENTER);
+    textFont(jersey25);
+    textSize(40);
+    if (cupChoice === 1) {
+        text("You have chosen the Glass with Ice!", 400, 50);
+        // draw the button with opposite colors to make it look selected
+        stroke("#355834");
+        strokeWeight(2);
+        fill("#DEE9D8");
+        rect(65, 315, 190, 40); // left option
+        strokeWeight(0);
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Glass with Ice", 80, 325);
+        // Label the buttons:   
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Hot Mug", 330, 325);
+        text("Jar with Ice", 550, 325);
+    } else if (cupChoice === 2) {
+        text("You have chosen the Hot Mug!", 400, 50);
+        // draw the button with opposite colors to make it look selected
+        stroke("#355834");
+        strokeWeight(2);
+        fill("#DEE9D8");
+        rect(320, 315, 160, 40); // center option
+        strokeWeight(0);
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Hot Mug", 330, 325);
+        // Label the buttons:   
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Glass with Ice", 80, 325);
+        text("Jar with Ice", 550, 325);
+    } else if (cupChoice === 3) {
+        text("You have chosen the Jar with Ice!", 400, 50);
+        // draw the button with opposite colors to make it look selected
+        stroke("#355834");
+        strokeWeight(2);
+        fill("#DEE9D8");
+        rect(535, 315, 175, 40); // right option
+        strokeWeight(0);
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Jar with Ice", 550, 325);
+        // Label the buttons:   
+        fill("#134611");
+        textAlign(LEFT, TOP);
+        textSize(24);
+        text("Glass with Ice", 80, 325);
+        text("Hot Mug", 330, 325);
+    }
+    // Put bowl images above each button:
+    image(cupImg1, 65, 125, 190, 190);
+    image(cupImg2, 300, 125, 190, 190);
+    image(cupImg3, 550, 125, 190, 190);
+    // make start task button at the bottom of the page:
+    strokeWeight(0);
+    fill("#134611");
+    rect(450, 400, 300, 40); 
+    fill("#DEE9D8");
+    textSize(24);
+    text("Start fourth homework task!", 460, 410);
+    // highlight the start ask button so user knows to move onto the next task: 
+    fill("#134611");
+    text(">", 435, 410);
+    text("<", 760, 410);
+
+    if (Number(buttonState) === 1) {
+        stage = 12; // move to next stage
+        stageStartTime = millis(); // store the time 
+    }
+}
+
+function taskFourPage() {
+    let str = port.readUntil("\n"); // Read from the port until the newline
+    if (str.length == 0) return; // If we didn't read anything, return.
+
+    // grab all values and put them in an array of variables
+    let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // count the time elapsed since displaying this page:
+    let timeElapsed = Math.floor((millis() - stageStartTime) / 1000); // seconds since stage started
+    // convert the time elasped into a clock format (mm:ss):
+    let minutes = Math.floor(timeElapsed / 60);
+    let seconds = timeElapsed % 60;
+
+    let timeElapsedFormatted = nf(minutes, 2) + ":" + nf(seconds, 2);    
+    totalTime = timeElapsedFormatted;
+
+    // if button not pressed, display the chosen bowl
+    if (Number(buttonState) === 0) {
+        background("#DEE9D8");
+        fill("#134611");
+        // position text based on the left of the text box:
+        textAlign(LEFT);
+        textFont(jersey25);
+        textSize(24);
+        // display the amount of time that has elapsed since displaying this page:
+        text("Time Elapsed: " + timeElapsedFormatted, 25, 470);
+        // make second text box:
+        fill("#BACDB0");
+        rect(290, 10, 350, 50);
+        fill("#134611");
+        textSize(18);
+        text("While the matcha is whisking, complete your next homework task.", 300, 20, 340);
         // make Ive finished button at the bottom of the page:
         strokeWeight(0);
         fill("#134611");
@@ -668,28 +927,23 @@ function taskThreePage() {
         text("<", 760, 460);
         // Display the chosen bowl: 
         if (bowlChoice === 1) {
-            image(bowlImg2, 230, 150, 380, 380);
+            image(bowlImg1, 310, 150, 380, 380);
         } else if (bowlChoice === 2) {
-            image(bowlImg2, 230, 150, 380, 380);
+            image(bowlImg2, 230, 150, 370, 370);
         } else if (bowlChoice === 3) {
             image(bowlImg3, 230, 150, 380, 380);
         }
-        image(whisk, 230, 100, 250, 250);
+        // insert whisk gif into bowl
+        image(whisk, 260, 100, 250, 250);
+        // insert hot water on the side
+        image(water, 10, 100, 250, 250);
     } else if (Number(buttonState) === 1) {
-        stage = 10; // move to next stage
+        stage = 13; // move to next stage
     }
 }
 
-function chooseCupPage() {
-}
-
-function cupChosen() {
-
-}
-function taskFourPage() {
-}
-
 function endPage() {
+
 }
 
 
