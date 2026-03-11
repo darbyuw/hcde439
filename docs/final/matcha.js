@@ -16,9 +16,16 @@ let totalTime = 0;
 let cupChoice = 2;
 // store font
 var jersey25;
+// store whether a new joystick move can register
+let joystickReady = true; 
+// store accumulated homework time in seconds:
+let totalHomeworkTime = 0;
+// initialize confetti variables
+let confettiParticles = [];
+let confettiInitialized = false;
 
 function preload() {
-    logoImg = loadImage("./assets/temp-logo.png");
+    logoImg = loadImage("./assets/logo.png");
     jersey25 = loadFont("Jersey25-Regular.ttf");
     kettle1Img = loadImage("./assets/classic_electric_kettle.png");
     kettle2Img = loadImage("./assets/green_kettle.png");
@@ -61,6 +68,8 @@ function draw() {
         kettleChosen();
     } else if (stage === 4) {
         taskOnePage();
+    } else if (stage === 4.5) { 
+        celebrationModal("Woo hoo! You finished your first task in " + totalTime + " and the water is now boiling!", 5);
     } else if (stage === 5) {
         chooseBowlPage();
     } else if (stage === 6) {
@@ -71,6 +80,8 @@ function draw() {
         finishTaskTwo();
     } else if (stage === 9) {
         taskThreePage();
+    } else if (stage === 9.5) {
+        celebrationModal("Woo hoo! You finished your third task in " + totalTime + " and the matcha has been whisked!", 10);
     } else if (stage === 10) {
         chooseCupPage();
     } else if (stage === 11) {
@@ -94,18 +105,18 @@ function startPage() {
     // If the button is not pressed, stay on the start page
     if (Number(buttonState) === 0) {
         background("#BACDB0");
-        image(logoImg, 150, 100, 446.48, 144.16); // draw logo at top of the page
+        image(logoImg, 100, 100, 634, 199.84); // draw logo at top of the page
         // create a button:
         fill("#134611");
-        rect(300, 300, 150, 40); // draw button
+        rect(325, 300, 150, 40); // draw button
         textSize(24);
         fill("#DEE9D8");
         textAlign(CENTER, CENTER);
         textFont(jersey25); // change font to jersey25 font
-        text("Start Game", 375, 319);
+        text("Start Game", 400, 319);
         fill("#134611");
-        text(">", 280, 319); // draw ">" to indicate the button can be pressed
-        text("<", 470, 319);
+        text(">", 305, 319); // draw ">" to indicate the button can be pressed
+        text("<", 495, 319);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 1; // if so, move to next stage
@@ -126,7 +137,7 @@ function instructionsPage() {
         rect(50, 50, 700, 400); // draw box for instructions
         fill("#134611");
         textFont(jersey25); // change font to jersey25 font
-        textSize(24);
+        textSize(28);
         textAlign(LEFT);
         text("Instructions", 75, 100);
         textSize(20);
@@ -184,32 +195,46 @@ function chooseKettlePage() {
 
     // if button not pressed, allow user to switch between highlighted kettle options
     if (Number(buttonState) === 0) {
-        // if highlighted kettle is 2 (default), highlight the center kettle option (using > < symbols on either side of the option)
-        if (currentHighlighted === 2) {
-            fill("#134611");
-            text(">", 300, 325);
-            text("<", 475, 325);
-            // if joystick left, goto left kettle, change highlighted kettle variable to 1
-            if (Number(xVal) < 500) {
-                currentHighlighted = 1;
-            } else if (Number(xVal) > 525) { // if joystick right, goto right kettle, change highlighted kettle variable to 3
-                currentHighlighted = 3;
-            }
-        } else if (currentHighlighted === 1) { // if highlighted kettle is 1, highlight the left kettle option
-            fill("#134611");
-            text(">", 45, 325);
-            text("<", 245, 325);
-            if (Number(xVal) > 525) { // if joystick right, goto center kettle, change highlighted kettle variable to 2
-                currentHighlighted = 2;
-            }
-        } else if (currentHighlighted === 3) { // if highlighted kettle is 3, highlight the right kettle option
-            fill("#134611");
-            text(">", 515, 325);
-            text("<", 755, 325);
-            if (Number(xVal) < 500) { // if joystick left, goto center kettle, change highlighted kettle variable to 2
-                currentHighlighted = 2;
-            }
-        } 
+        let xNum = Number(xVal);
+
+        if (xNum >= 500 && xNum <= 525) {
+            joystickReady = true; // joystick is back at center, ready for next input
+        }
+
+        if (joystickReady) {
+            // if highlighted kettle is 2 (default), highlight the center kettle option (using > < symbols on either side of the option)
+            if (currentHighlighted === 2) {
+                fill("#134611");
+                text(">", 300, 325);
+                text("<", 475, 325);
+                // if joystick left, goto left kettle, change highlighted kettle variable to 1
+                if (xNum < 500) {
+                    currentHighlighted = 1;
+                    joystickReady = false;
+                } else if (xNum > 525) {
+                    currentHighlighted = 3;
+                    joystickReady = false;
+                }
+            } else if (currentHighlighted === 1) { // if highlighted kettle is 1, highlight the left kettle option
+                fill("#134611");
+                text(">", 45, 325);
+                text("<", 245, 325);
+                // if joystick right, goto center kettle, change highlighted kettle variable to 2
+                if (xNum > 525) {
+                    currentHighlighted = 2;
+                    joystickReady = false;
+                }
+            } else if (currentHighlighted === 3) { // if highlighted kettle is 3, highlight the right kettle option
+                fill("#134611");
+                text(">", 515, 325);
+                text("<", 755, 325);
+                // if joystick left, goto center kettle, change highlighted kettle variable to 2
+                if (xNum < 500) {
+                    currentHighlighted = 2;
+                    joystickReady = false;
+                }
+            } 
+        }
     } else if (Number(buttonState) === 1) {
         // if highlighted kettle is 1, set the kettle choice variable to 1, move to next stage
         if (currentHighlighted === 1) {
@@ -231,6 +256,9 @@ function kettleChosen() {
 
     // grab all values and put them in an array of variables
     let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // reset joystick ready
+    joystickReady = true;
 
     // display the selected kettle and other options from stage 2:
     background("#DEE9D8");
@@ -343,12 +371,12 @@ function taskOnePage() {
         text("Time Elapsed: " + timeElapsedFormatted, 25, 470);
         // make first text box:
         fill("#BACDB0");
-        rect(25, 25, 250, 100);
+        rect(25, 25, 235, 100);
         fill("#134611");
         text("Complete your first homework task while the water boils!", 35, 35, 225);
         // make second text box:
         fill("#BACDB0");
-        rect(520, 370, 260, 70);
+        rect(520, 370, 240, 65);
         fill("#134611");
         textSize(18);
         text("Press the button to continue making your latte", 530, 380, 250);
@@ -372,7 +400,51 @@ function taskOnePage() {
             image(kettle3Img, 230, 125, 300, 300);
         }
     } else if (Number(buttonState) === 1) {
-        stage = 5; // move to next stage
+        // store total homework time to use referenced on the end page
+        totalHomeworkTime += Math.floor((millis() - stageStartTime) / 1000);
+        stage = 4.5; // move to next stage
+    }
+}
+
+// diaplsy celebration modal when a user has finished a homework task
+function celebrationModal(message, nextStage) {
+    let str = port.readUntil("\n");
+    if (str.length == 0) return;
+    let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    background("#DEE9D8");
+
+    // Dimmed overlay
+    fill(0, 0, 0, 80);
+    rect(0, 0, width, height);
+
+    // Modal box
+    fill("#BACDB0");
+    stroke("#134611");
+    strokeWeight(1);
+    rect(175, 150, 450, 200);
+
+    // Modal text
+    strokeWeight(0);
+    fill("#134611");
+    textFont(jersey25);
+    textSize(22);
+    textAlign(CENTER, CENTER);
+    text(message, 210, 225, 390);
+
+    // Continue button
+    fill("#134611");
+    rect(300, 295, 200, 40);
+    fill("#DEE9D8");
+    textSize(24);
+    text("Continue", 400, 314);
+    fill("#134611");
+    text(">", 278, 314);
+    text("<", 522, 314);
+
+    if (Number(buttonState) === 1) {
+        stage = nextStage;
+        currentHighlighted = 2; // reset joystick highlight for next selection page
     }
 }
 
@@ -382,25 +454,15 @@ function chooseBowlPage() {
 
     // grab all values and put them in an array of variables
     let [buttonState, xVal, yVal] = str.trim().split(",");
-
-    // keep track of the previous x val, if in center and previous is the same as current, 
-    // then wait until x val is in center. ?? 
-
     
     // display bowls weather or not the button is pressed:
     background("#DEE9D8");
-    // Make textbox:
-    fill("#BACDB0");
-    rect(5, 5, 230, 90);
-    textSize(18);
-    fill("#134611");
-    text("Woo hoo! You finished your first task in " + totalTime + " and the water is now boiling!", 10, 10, 225);
     // Make title
     fill("#134611");
     textAlign(CENTER);
     textFont(jersey25); 
     textSize(40);
-    text("Pick a bowl to sift your matcha into!", 500, 50);
+    text("Pick a bowl to sift your matcha into!", 400, 50);
     // draw three rectangles for the buttons of the three kettles:
     rect(65, 315, 190, 40); // left option
     rect(320, 315, 160, 40); // center option
@@ -419,32 +481,46 @@ function chooseBowlPage() {
 
     // if button not pressed, allow user to switch between highlighted options
     if (Number(buttonState) === 0) {
-        // if highlighted is 2 (default), highlight the center option (using > < symbols on either side of the option)
-        if (currentHighlighted === 2) {
-            fill("#134611");
-            text(">", 300, 325);
-            text("<", 485, 325);
-            // if joystick left, goto left, change highlighted variable to 1
-            if (Number(xVal) < 500) {
-                currentHighlighted = 1;
-            } else if (Number(xVal) > 525) { // if joystick right, goto right, change highlighted variable to 3
-                currentHighlighted = 3;
-            }
-        } else if (currentHighlighted === 1) { // if highlighted is 1, highlight the left option
-            fill("#134611");
-            text(">", 45, 325);
-            text("<", 265, 325);
-            if (Number(xVal) > 525) { // if joystick right, goto center, change highlighted variable to 2
-                currentHighlighted = 2;
-            }
-        } else if (currentHighlighted === 3) { // if highlighted is 3, highlight the right option
-            fill("#134611");
-            text(">", 515, 325);
-            text("<", 725, 325);
-            if (Number(xVal) < 500) { // if joystick left, goto center, change highlighted variable to 2
-                currentHighlighted = 2;
-            }
-        } 
+        let xNum = Number(xVal);
+
+        if (xNum >= 500 && xNum <= 525) {
+            joystickReady = true; // joystick is back at center, ready for next input
+        }
+
+        if (joystickReady) {
+            // if highlighted kettle is 2 (default), highlight the center kettle option (using > < symbols on either side of the option)
+            if (currentHighlighted === 2) {
+                fill("#134611");
+                text(">", 300, 325);
+                text("<", 485, 325);
+                // if joystick left, goto left kettle, change highlighted kettle variable to 1
+                if (xNum < 500) {
+                    currentHighlighted = 1;
+                    joystickReady = false;
+                } else if (xNum > 525) {
+                    currentHighlighted = 3;
+                    joystickReady = false;
+                }
+            } else if (currentHighlighted === 1) { // if highlighted kettle is 1, highlight the left kettle option
+                fill("#134611");
+                text(">", 45, 325);
+                text("<", 265, 325);
+                // if joystick right, goto center kettle, change highlighted kettle variable to 2
+                if (xNum > 525) {
+                    currentHighlighted = 2;
+                    joystickReady = false;
+                }
+            } else if (currentHighlighted === 3) { // if highlighted kettle is 3, highlight the right kettle option
+                fill("#134611");
+                text(">", 515, 325);
+                text("<", 725, 325);
+                // if joystick left, goto center kettle, change highlighted kettle variable to 2
+                if (xNum < 500) {
+                    currentHighlighted = 2;
+                    joystickReady = false;
+                }
+            } 
+        }
     } else if (Number(buttonState) === 1) {
         // if highlighted is 1, set the choice variable to 1, move to next stage
         if (currentHighlighted === 1) {
@@ -467,6 +543,8 @@ function bowlChosen() {
 
     // grab all values and put them in an array of variables
     let [buttonState, xVal, yVal] = str.trim().split(",");
+    // reset joystick ready
+    joystickReady = true;
 
     // Note: the following text is not put into a funciton be be reused for each stage because 
     // the images are each slightly different dimentions and the text are slightly different lengths 
@@ -546,7 +624,7 @@ function bowlChosen() {
     text("Click to start second homework task", 410, 410);
     // highlight the start ask button so user knows to move onto the next task: 
     fill("#134611");
-    text(">", 385, 410);
+    text(">", 380, 410);
     text("<", 765, 410);
 
     if (Number(buttonState) === 1) {
@@ -596,7 +674,7 @@ function taskTwoPage() {
         text("I've Finished!", 610, 460);
         // highlight the button so user knows to move onto the next task: 
         fill("#134611");
-        text(">", 580, 460);
+        text(">", 575, 460);
         text("<", 760, 460);
         // Display the chosen bowl: 
         if (bowlChoice === 1) {
@@ -608,14 +686,15 @@ function taskTwoPage() {
             // insert sift above bowl
             image(sift, 230, 40, 350, 350);
         } else if (bowlChoice === 3) {
-            image(bowlImg3, 230, 150, 380, 380);
+            image(bowlImg3, 230, 120, 380, 380);
             // insert sift above bowl
-            image(sift, 230, 70, 350, 350);
+            image(sift, 230, 40, 350, 350);
         }
         
         // insert soaking whisk image to the left
         image(soakWhisk, 10, 125, 250, 250);
     } else if (Number(buttonState) === 1) {
+        totalHomeworkTime += Math.floor((millis() - stageStartTime) / 1000);
         stage = 8; // move to next stage
     }
 } 
@@ -630,8 +709,20 @@ function finishTaskTwo() {
     // If the button is not pressed, display intructions
     if (Number(buttonState) === 0) {
         background("#DEE9D8");
+        // fill("#BACDB0");
+        // rect(200, 130, 400, 180); // draw box for instructions
+
+        // Dimmed overlay
+        fill(0, 0, 0, 80);
+        rect(0, 0, width, height);
+
+        // Modal box
         fill("#BACDB0");
-        rect(200, 130, 400, 180); // draw box for instructions
+        stroke("#134611");
+        strokeWeight(1);
+        rect(200, 130, 400, 180);
+        // text
+        strokeWeight(0);
         fill("#134611");
         textFont(jersey25); 
         textAlign(LEFT);
@@ -649,7 +740,7 @@ function finishTaskTwo() {
         text("Click to start third homework task", 415, 408);
         fill("#134611");
         text(">", 235, 410); // draw ">" to indicate the button can be pressed
-        text("<", 590, 410);
+        text("<", 600, 410);
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 9; // if so, move to next stage
@@ -698,7 +789,7 @@ function taskThreePage() {
         text("I've Finished!", 610, 470);
         // highlight the button so user knows to move onto the next task: 
         fill("#134611");
-        text(">", 580, 470);
+        text(">", 575, 470);
         text("<", 760, 470);
         // Display the chosen bowl: 
         if (bowlChoice === 1) {
@@ -706,9 +797,9 @@ function taskThreePage() {
             // insert whisk gif into bowl
             image(whisk, 330, 70, 270, 270);
         } else if (bowlChoice === 2) {
-            image(bowlImg2, 230, 130, 370, 370);
+            image(bowlImg2, 250, 130, 370, 370);
             // insert whisk gif into bowl
-            image(whisk, 270, 70, 270, 270);
+            image(whisk, 290, 70, 270, 270);
         } else if (bowlChoice === 3) {
             image(bowlImg3, 270, 130, 380, 380);
             // insert whisk gif into bowl
@@ -718,7 +809,8 @@ function taskThreePage() {
         // insert hot water on the side
         image(water, 10, 100, 250, 250);
     } else if (Number(buttonState) === 1) {
-        stage = 10; // move to next stage
+        totalHomeworkTime += Math.floor((millis() - stageStartTime) / 1000);
+        stage = 9.5; // move to next stage
     }
 }
 
@@ -731,18 +823,12 @@ function chooseCupPage() {
    
     // display bowls weather or not the button is pressed:
     background("#DEE9D8");
-     // Make textbox:
-    fill("#BACDB0");
-    rect(5, 5, 230, 80);
-    fill("#134611");
-    textSize(18);
-    textAlign(LEFT);
-    text("Woo hoo! You finished your third task in " + totalTime + " and the matcha has been whisked.", 10, 10, 225);
+    // make title
     fill("#134611");
     textAlign(CENTER);
     textFont(jersey25); 
     textSize(40);
-    text("Pick a cup to drink your matcha in!", 500, 50);
+    text("Pick a cup to drink your matcha in!", 400, 50);
     // draw three rectangles for the buttons of the three kettles:
     rect(65, 315, 190, 40); // left option
     rect(320, 315, 160, 40); // center option
@@ -761,32 +847,46 @@ function chooseCupPage() {
 
     // if button not pressed, allow user to switch between highlighted options
     if (Number(buttonState) === 0) {
-        // if highlighted is 2 (default), highlight the center option (using > < symbols on either side of the option)
-        if (currentHighlighted === 2) {
-            fill("#134611");
-            text(">", 300, 325);
-            text("<", 485, 325);
-            // if joystick left, goto left, change highlighted variable to 1
-            if (Number(xVal) < 500) {
-                currentHighlighted = 1;
-            } else if (Number(xVal) > 525) { // if joystick right, goto right, change highlighted variable to 3
-                currentHighlighted = 3;
-            }
-        } else if (currentHighlighted === 1) { // if highlighted is 1, highlight the left option
-            fill("#134611");
-            text(">", 45, 325);
-            text("<", 265, 325);
-            if (Number(xVal) > 525) { // if joystick right, goto center, change highlighted variable to 2
-                currentHighlighted = 2;
-            }
-        } else if (currentHighlighted === 3) { // if highlighted is 3, highlight the right option
-            fill("#134611");
-            text(">", 535, 325);
-            text("<", 745, 325);
-            if (Number(xVal) < 500) { // if joystick left, goto center, change highlighted variable to 2
-                currentHighlighted = 2;
-            }
-        } 
+        let xNum = Number(xVal);
+
+        if (xNum >= 500 && xNum <= 525) {
+            joystickReady = true; // joystick is back at center, ready for next input
+        }
+
+        if (joystickReady) {
+            // if highlighted kettle is 2 (default), highlight the center kettle option (using > < symbols on either side of the option)
+            if (currentHighlighted === 2) {
+                fill("#134611");
+                text(">", 300, 325);
+                text("<", 485, 325);
+                // if joystick left, goto left kettle, change highlighted kettle variable to 1
+                if (xNum < 500) {
+                    currentHighlighted = 1;
+                    joystickReady = false;
+                } else if (xNum > 525) {
+                    currentHighlighted = 3;
+                    joystickReady = false;
+                }
+            } else if (currentHighlighted === 1) { // if highlighted kettle is 1, highlight the left kettle option
+                fill("#134611");
+                text(">", 45, 325);
+                text("<", 265, 325);
+                // if joystick right, goto center kettle, change highlighted kettle variable to 2
+                if (xNum > 525) {
+                    currentHighlighted = 2;
+                    joystickReady = false;
+                }
+            } else if (currentHighlighted === 3) { // if highlighted kettle is 3, highlight the right kettle option
+                fill("#134611");
+                text(">", 530, 325);
+                text("<", 740, 325);
+                // if joystick left, goto center kettle, change highlighted kettle variable to 2
+                if (xNum < 500) {
+                    currentHighlighted = 2;
+                    joystickReady = false;
+                }
+            } 
+        }
     } else if (Number(buttonState) === 1) {
         // if highlighted is 1, set the choice variable to 1, move to next stage
         if (currentHighlighted === 1) {
@@ -808,6 +908,9 @@ function cupChosen() {
 
     // grab all values and put them in an array of variables
     let [buttonState, xVal, yVal] = str.trim().split(",");
+
+    // reset joystick ready
+    joystickReady = true;
 
     // Display the selected bowl and other options:
     background("#DEE9D8");
@@ -880,11 +983,11 @@ function cupChosen() {
     rect(450, 400, 240, 40); 
     fill("#DEE9D8");
     textSize(24);
-    text("Click to start last task!", 460, 410);
+    text("Click to start last task!", 465, 410);
     // highlight the start ask button so user knows to move onto the next task: 
     fill("#134611");
     text(">", 430, 410);
-    text("<", 710, 410);
+    text("<", 705, 410);
 
     if (Number(buttonState) === 1) {
         stage = 12; // move to next stage
@@ -933,7 +1036,7 @@ function taskFourPage() {
         text("I've Finished!", 610, 460);
         // highlight the button so user knows to move onto the next task: 
         fill("#134611");
-        text(">", 580, 460);
+        text(">", 575, 460);
         text("<", 760, 460);
         // Display the chosen cup: 
         if (cupChoice === 1) {
@@ -956,6 +1059,7 @@ function taskFourPage() {
             image(spoon, 390, 40, 240, 240);
         }
     } else if (Number(buttonState) === 1) {
+        totalHomeworkTime += Math.floor((millis() - stageStartTime) / 1000);
         stage = 13; // move to next stage
     }
 }
@@ -970,38 +1074,79 @@ function endPage() {
     // If the button is not pressed, display intructions
     if (Number(buttonState) === 0) {
         background("#DEE9D8");
+
+            // initialize confetti once when arriving on this page
+        if (!confettiInitialized) {
+            initConfetti();
+            confettiInitialized = true;
+        }
+        drawConfetti(); // draw confetti behind everything else
+
         fill("#BACDB0");
-        rect(10, 140, 220, 260); // draw box for instructions
+        rect(25, 100, 220, 260); // draw box for instructions
         fill("#134611");
         textFont(jersey25); 
         textAlign(LEFT, TOP);
         textSize(20);
-        text("Great job on your homework! You finished your fourth task in " + totalTime + ".", 20, 150, 220);
-        text("Pour the matcha on top of the milk and we're done!", 20, 240, 230);
+        text("Great job on your homework! You finished your fourth task in " + totalTime + ".", 35, 110, 220);
+        text("Pour the matcha on top of the milk and we're done!", 35, 200, 230);
         textSize(26);
-        text("Session Stats", 20, 310);
+        text("Session Stats", 35, 270);
         textSize(20);
-        text("Tasks Competed: 4", 20, 345);
-        text("Total Time: " + "insert time", 20, 370);
+        text("Tasks Competed: 4", 35, 305);
+        // calculate the total time spent doing homework
+        let totalMins = Math.floor(totalHomeworkTime / 60);
+        let totalSecs = totalHomeworkTime % 60;
+        // display total time in minutes and seconds:
+        text("Total Time: " + nf(totalMins, 2) + ":" + nf(totalSecs, 2), 35, 330);
         fill("#134611");
+
         // draw the final matcha image in the center: 
         if (cupChoice === 1) {
-            image(cupFinal, 280, 60, 300, 300);
+            image(cupFinal, 290, 80, 270, 270);
         } else if (cupChoice === 2) {
-            image(mugFinal, 280, 100, 280, 280);
+            image(mugFinal, 290, 100, 250, 250);
         } else if (cupChoice === 3) {
-            image(jarFinal, 280, 120, 280, 280);
+            image(jarFinal, 290, 100, 250, 250);
         }
+
+         // draw chosen kettle to the right of the cup:
+        if (kettleChoice === 1) {
+            image(kettle1Img, 590, 80, 130, 130);
+        } else if (kettleChoice === 2) {
+            image(kettle2Img, 590, 80, 130, 130);
+        } else if (kettleChoice === 3) {
+            image(kettle3Img, 590, 80, 130, 130);
+        }
+
+        // draw chosen bowl below the kettle:
+        if (bowlChoice === 1) {
+            image(bowlImg1, 590, 230, 130, 130);
+        } else if (bowlChoice === 2) {
+            image(bowlImg2, 590, 230, 130, 130);
+        } else if (bowlChoice === 3) {
+            image(bowlImg3, 590, 230, 130, 130);
+        }
+
+        // small labels under each accessory image:
+        fill("#134611");
+        textSize(14);
+        textAlign(CENTER);
+        text("Your Kettle", 655, 215);
+        text("Your Bowl", 655, 365);
+
         // draw start over button:
-        rect(280, 390, 280, 40); 
+        strokeWeight(0);
+        rect(325, 420, 150, 40);
         textSize(24);
         fill("#DEE9D8");
         textAlign(CENTER, CENTER);
         textFont(jersey25);
-        text("Start over", 415, 408);
+        text("Start over", 400, 438);
         fill("#134611");
-        text(">", 265, 410); // draw ">" to indicate the button can be pressed
-        text("<", 570, 410);
+        text(">", 305, 438);
+        text("<", 495, 438);
+
     } else if (Number(buttonState) === 1) {
         // If the button is pressed
         stage = 0; // if so, move to next stage
@@ -1017,12 +1162,60 @@ function endPage() {
         totalTime = 0;
         // keep track of cup choice
         cupChoice = 2;
+        // reset joystick ready
+        joystickReady = true;
+        // reset total time spent doing hw
+        totalHomeworkTime = 0;
+        // 
+        confettiInitialized = false;
+        confettiParticles = [];
     }
 }
 
+function initConfetti() {
+    confettiParticles = [];
+    let colors = ["#134611", "#BACDB0", "#DEE9D8", "#355834", "#7DAF7A", "#F0E68C", "#FFD700"];
+    for (let i = 0; i < 120; i++) {
+        confettiParticles.push({
+            x: random(width),
+            y: random(-200, 0),         // start above the canvas
+            size: random(6, 14),
+            color: random(colors),
+            speedY: random(2, 5),
+            speedX: random(-1.5, 1.5),
+            rotation: random(TWO_PI),
+            rotationSpeed: random(-0.1, 0.1),
+            shape: random(["rect"]) // shapes
+        });
+    }
+}
 
+function drawConfetti() {
+    for (let p of confettiParticles) {
+        push();
+        translate(p.x, p.y);
+        rotate(p.rotation);
+        fill(p.color);
+        noStroke();
+        if (p.shape === "rect") {
+            rect(0, 0, p.size, p.size * 0.5);
+        } else {
+            ellipse(0, 0, p.size, p.size);
+        }
+        pop();
 
+        // update position each frame
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.rotation += p.rotationSpeed;
 
+        // if a particle falls off the bottom, reset it to the top
+        if (p.y > height) {
+            p.y = random(-100, 0);
+            p.x = random(width);
+        }
+    }
+}
 
 // ------------------ CANVAS FUNCTIONS ------------------
 
