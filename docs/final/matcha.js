@@ -35,6 +35,9 @@ function preload() {
     cupImg3 = loadImage("./assets/jar_ice.png");
     milk = loadImage("./assets/pour_milk.png");
     spoon = loadImage("./assets/spoon.png");
+    cupFinal = loadImage("./assets/cup_final.png");
+    jarFinal = loadImage("./assets/jar_final.png");
+    mugFinal = loadImage("./assets/mug_final.png");
 }
 
 function setup() {
@@ -297,14 +300,14 @@ function kettleChosen() {
     // make start task button at the bottom of the page:
     strokeWeight(0);
     fill("#134611");
-    rect(455, 400, 320, 40); 
+    rect(420, 400, 330, 40); 
     fill("#DEE9D8");
     textSize(24);
-    text("Click to start first homework task", 465, 410);
+    text("Click to start first homework task", 430, 410);
     // highlight the start ask button so user knows to move onto the next task: 
     fill("#134611");
-    text(">", 435, 410);
-    text("<", 770, 410);
+    text(">", 400, 410);
+    text("<", 760, 410);
 
     if (Number(buttonState) === 1) {
         stage = 4; // move to next stage
@@ -917,10 +920,10 @@ function taskFourPage() {
         text("Time Elapsed: " + timeElapsedFormatted, 25, 470);
         // make second text box:
         fill("#BACDB0");
-        rect(290, 10, 350, 73);
+        rect(20, 300, 200, 100);
         fill("#134611");
         textSize(18);
-        text("While the milk is being poured into the glass with sweetener, complete your last homework task", 300, 20, 340);
+        text("While the milk is being poured into the glass with sweetener, complete your last homework task", 30, 310, 200);
         // make Ive finished button at the bottom of the page:
         strokeWeight(0);
         fill("#134611");
@@ -935,14 +938,23 @@ function taskFourPage() {
         // Display the chosen cup: 
         if (cupChoice === 1) {
             image(cupImg1, 250, 150, 330, 330);
+            // display the measuring cup pouring into the glass
+            image(milk, 210, -15, 240, 240);
+            // display the spoon with sweatener
+            image(spoon, 400, 20, 240, 240);
         } else if (cupChoice === 2) {
             image(cupImg2, 230, 150, 370, 370);
+            // display the measuring cup pouring into the glass
+            image(milk, 120, 5, 300, 300);
+            // display the spoon with sweatener
+            image(spoon, 360, 40, 240, 240);
         } else if (cupChoice === 3) {
             image(cupImg3, 230, 150, 310, 310);
+            // display the measuring cup pouring into the glass
+            image(milk, 180, 0, 240, 240);
+            // display the spoon with sweatener
+            image(spoon, 390, 40, 240, 240);
         }
-        // display the measuring cup with milk?
-        // display the measuring cup pouring into the glass
-        // display the spoon with sweatener
     } else if (Number(buttonState) === 1) {
         stage = 13; // move to next stage
     }
@@ -959,17 +971,27 @@ function endPage() {
     if (Number(buttonState) === 0) {
         background("#DEE9D8");
         fill("#BACDB0");
-        rect(200, 140, 400, 200); // draw box for instructions
+        rect(10, 140, 220, 260); // draw box for instructions
         fill("#134611");
         textFont(jersey25); 
-        textAlign(LEFT);
+        textAlign(LEFT, TOP);
         textSize(20);
-        text("Great job on your homework! You finished your fourth task in " + totalTime + ".", 210, 170, 390);
-        text("Pour the matcha on top of the milk and we're done!", 210, 230, 400);
-        text("Session Stats", 210, 250);
-        text("Tasks Competed: 4", 210, 260);
-        text("Total Time: " + "insert time", 210, 270);
+        text("Great job on your homework! You finished your fourth task in " + totalTime + ".", 20, 150, 220);
+        text("Pour the matcha on top of the milk and we're done!", 20, 240, 230);
+        textSize(26);
+        text("Session Stats", 20, 310);
+        textSize(20);
+        text("Tasks Competed: 4", 20, 345);
+        text("Total Time: " + "insert time", 20, 370);
         fill("#134611");
+        // draw the final matcha image in the center: 
+        if (cupChoice === 1) {
+            image(cupFinal, 280, 60, 300, 300);
+        } else if (cupChoice === 2) {
+            image(mugFinal, 280, 100, 280, 280);
+        } else if (cupChoice === 3) {
+            image(jarFinal, 280, 120, 280, 280);
+        }
         // draw start over button:
         rect(280, 390, 280, 40); 
         textSize(24);
