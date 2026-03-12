@@ -23,10 +23,13 @@ let totalHomeworkTime = 0;
 // initialize confetti variables
 let confettiParticles = [];
 let confettiInitialized = false;
+// store font figtree
+var figTree;
 
 function preload() {
     logoImg = loadImage("./assets/logo.png");
     jersey25 = loadFont("Jersey25-Regular.ttf");
+    figTree = loadFont("./assets/Figtree-VariableFont_wght.ttf")
     kettle1Img = loadImage("./assets/classic_electric_kettle.png");
     kettle2Img = loadImage("./assets/green_kettle.png");
     kettle3Img = loadImage("./assets/graves_kettle.png");
@@ -45,6 +48,7 @@ function preload() {
     cupFinal = loadImage("./assets/cup_final.png");
     jarFinal = loadImage("./assets/jar_final.png");
     mugFinal = loadImage("./assets/mug_final.png");
+    steam = loadImage("./assets/steam.gif");
 }
 
 function setup() {
@@ -141,11 +145,12 @@ function instructionsPage() {
         textAlign(LEFT);
         text("Instructions", 75, 100);
         textSize(20);
-        text("Before starting, remove any distractions, and put away your phone.", 75, 145);
-        text("Break up your homework into four tasks. This could be one assignment split into smaller parts, or four separate assignments.", 75, 187, 650);
-        text("Each task will be paired with a step while making a matcha latte. You will move onto the next step in the game when you finish your homework task!", 75, 244, 650);
-        text("You will get to customize your matcha as you go, at the end you will have a customized matcha latte!", 75, 305, 650);
-        text("Grab a study drink and lets get started by choosing our first item!", 75, 352);
+        textFont(figTree);
+        text("Before starting, remove any distractions.", 75, 150);
+        text("Break up your homework into four tasks (This could be one assignment split into smaller parts, or four separate assignments).", 75, 200, 650);
+        text("Each task will be paired with a step while making a matcha latte. You will move onto the next step in the game when you finish a homework task!", 75, 265, 650);
+        // text("You will get to customize your matcha as you go, at the end you will have a customized matcha latte!", 75, 305, 650);
+        text("Lets get started by choosing your first item!", 75, 340);
         fill("#134611");
         // draw start button:
         rect(350, 390, 150, 40); 
@@ -366,20 +371,15 @@ function taskOnePage() {
         // position text based on the center of the text box:
         textAlign(LEFT);
         textFont(jersey25);
-        textSize(24);
         // display the amount of time that has elapsed since displaying this page:
         text("Time Elapsed: " + timeElapsedFormatted, 25, 470);
-        // make first text box:
-        fill("#BACDB0");
-        rect(25, 25, 235, 100);
-        fill("#134611");
-        text("Complete your first homework task while the water boils!", 35, 35, 225);
         // make second text box:
         fill("#BACDB0");
-        rect(520, 370, 240, 65);
+        rect(540, 200, 250, 130);
         fill("#134611");
-        textSize(18);
-        text("Press the button to continue making your latte", 530, 380, 250);
+        textSize(20);
+        text("Complete your first homework task while the water boils!", 550, 210, 240);
+        text("Press the button to continue making your latte when done.", 550, 270, 250);
         // make Ive finished button at the bottom of the page:
         strokeWeight(0);
         fill("#134611");
@@ -393,11 +393,14 @@ function taskOnePage() {
         text("<", 760, 460);
         // Display the chosen kettle: 
         if (kettleChoice === 1) {
-            image(kettle1Img, 250, 125, 300, 300);
+            image(kettle1Img, 200, 125, 300, 300);
+            image(steam, 105, 40, 150, 150);
         } else if (kettleChoice === 2) {
-            image(kettle2Img, 250, 125, 300, 300);
+            image(kettle2Img, 200, 125, 300, 300);
+            image(steam, 85, 60, 150, 150);
         } else if (kettleChoice === 3) {
-            image(kettle3Img, 230, 125, 300, 300);
+            image(kettle3Img, 200, 125, 300, 300);
+            image(steam, 85, 60, 150, 150);
         }
     } else if (Number(buttonState) === 1) {
         // store total homework time to use referenced on the end page

@@ -14,6 +14,7 @@
   </head>
   <body>
     <!-- --------------------------- INTRO SECTION --------------------------- -->
+    <img src="./assets/logo.png" alt="Matcha Latte Homework Cafe Logo with Whisk">
     <h1>Matcha Latte Homework Cafe</h1>
     <div class="a1header">
       <p> 
@@ -22,47 +23,90 @@
         latte making process on screen, before completing each step they must finish a homework task. 
       </p>
     </div>
+    <br/>
     <!-- --------------------------- PLANNING SECTION --------------------------- -->
-    <h2>Planning</h2>
-    <img src="./images/initial_sketch.png" alt= "A digital sketch of a controler and computer"> 
-    <p>
-      After brainstoring ideas for this project, I sketched out the initial idea. This sketch shows
-       a controler with a joystick and button as well as a computer showing the web interface.
-    </p>
-    <img src="./images/storyboard.png" alt= "A storyboard of all game pages"> 
-    <p>
-      After proposing my project idea, I sketched each page within the game to understand how a user would move through the game. 
-    </p>
-    <div class="images">
-      <img src="./images/pixel_art.PNG" alt= "A screenshot of a Procreate gallery of artwork"> 
-      <img src="./images/pixel_art_2.PNG" alt= "A screenshot of a Procreate gallery of artwork"> 
+    <div class="planning">
+      <h2>Planning</h2>
+      <p>
+        For this project, I was interested in working with web input and the P5.js library. I wanted to create a game that was useful and desirable for people. 
+        While brainstorming, I was at a cafe drinking matcha and doing homework. This lead me to the idea of a homework motivation tool that was related to the
+        matcha latte process. I decided to move away from common homework tools that use the promodoro method, instead I used the matcha process as motivation.
+        After many failed rhymes with "matcha" and "homework", I landed on the name Matcha Latte Homework Cafe.  
+      </p>
+      <div class="images">
+        <img src="./images/initial_sketch.png" alt= "A digital sketch of a controler and computer"> 
+        <p>
+          After brainstoring ideas for this project, I sketched out the initial idea. This sketch shows
+          a controler with a joystick and button as well as a computer showing the web interface.
+        </p>
+      </div>
+      <br/>
+      <h3>Game Page Sketches</h3>
+      <img src="./images/storyboard.png" alt= "A storyboard of all game pages"> 
+      <p>
+        After proposing my project idea, I sketched each page within the game to understand how a user would move through the game. 
+      </p>
+      <br/>
+
+      <h3>Figma Low-Fidelity Wireframes</h3>
+      <div class="carousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-slide"><img src="./images/Welcome Page.png" alt="Slide 1"></div>
+          <div class="carousel-slide"><img src="./images/Instructions Page.png" alt="Slide 2"></div>
+          <div class="carousel-slide"><img src="./images/Choose Kettle.png" alt="Slide 3"></div>
+          <div class="carousel-slide"><img src="./images/Boil Water.png" alt="Slide 4"></div>
+          <div class="carousel-slide"><img src="./images/Choose Bowl.png" alt="Slide 4"></div>
+          <div class="carousel-slide"><img src="./images/Sift.png" alt="Slide 4"></div>
+          <div class="carousel-slide"><img src="./images/Whisk.png" alt="Slide 4"></div>
+          <div class="carousel-slide"><img src="./images/Choose Cup.png" alt="Slide 4"></div>
+          <div class="carousel-slide"><img src="./images/Milk.png" alt="Slide 4"></div>
+          <div class="carousel-slide"><img src="./images/Milk-1.png" alt="Slide 4"></div>
+        </div>
+        <button class="carousel-btn prev" onclick="carouselMove(-1)">&#8592;</button>
+        <button class="carousel-btn next" onclick="carouselMove(1)">&#8594;</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+      <p>
+        After sketching the pages, I turned them into low-fidelity wireframes so that I had a clear idea of what I was going to be coding.
+      </p>
+      <p>
+        I also applied a color pallet to these wireframes to produce the  high-fidelity wireframes. From there, it was easier to understand where to place objets in P5.js.
+        Note that these high-fidelity wireframes are not shown here because they look exactly like the final Matcha Latte Homework Cafe game pages (which can be seen in the Demo video below).
+      </p>
+
+      <br/>
+      <h3>Pixel Art</h3>
+      <div class="images">
+        <img src="./images/pixel_art.PNG" alt= "A screenshot of a Procreate gallery of artwork"> 
+        <img src="./images/pixel_art_2.PNG" alt= "A screenshot of a Procreate gallery of artwork"> 
+      </div>
       <p>
         Throughout this project, I created pixel artwork to make the game more desirable and allow users to customize thier matcha expirience. 
       </p>
+      <p>
+        I referenced this <a href="https://youtu.be/tPQTGC5-_Is?si=94IOMdbU_3Jda2E3">YouTube video tutorial</a> to learn how to create pixel art.
+      </p>
+
+      <br/>
+      <h2>Bill of Materials</h2>
+      <ul>
+        <li>Arduino Uno </li>
+        <li>Joystick (for sensing up, down, left, and right motion to navigate the game)</li>
+        <li>Button (for sensing touch and selecting options in the game)</li>
+        <li>10K ohm resistor (for button)</li>
+        <li>Cardboard and PLA filament (for low and mid fidelity prototypes)</li>
+        <li>Breadboard or arduino extension</li>
+        <li>P5.js, P5.play, HTML, CSS, and JS (for coding the game structure)</li>
+      </ul>
+      <br/>
     </div>
-    <p>
-      *include carousel of figma wireframes*
-    </p>
-    <p>
-      *include description of how/why you came up with the idea *
-    </p>
-    <p>
-      Anticipated Bill of Materials: 
-      Arduino Uno 
-      Joystick (for sensing up, down, left, and right motion to navigate the game)
-      Button (for sensing touch and selecting options in the game)
-      10K ohm resistor (for button)
-      Cardboard and PLA filament (for low and mid fidelity prototypes)
-      Breadboard or arduino extension
-      P5.js, P5.play, HTML, CSS, and JS (for coding the game structure)
-    </p>
     <!-- --------------------------- TECHNICAL IMPLEMENTATION SECTION --------------------------- -->
     <h2>Technical Implementation</h2>
     <!-- --------------------------- SCHEMATIC SECTION --------------------------- -->
     <div class="schematic">
-      <h2>Schematic</h2>
+      <h3>Schematic</h3>
       <div class="imagecrop">
-        <img src="./images/schematic-48.jpg" alt= "A schematic of the circuit."/>
+        <img src="./images/schematic_final.jpg" alt= "A schematic of the circuit."/>
       </div>
       <p> 
         This is a schematic of the circuit that I built for this project. The joystick is connected to the A0 and A1 analog in pins.
@@ -70,19 +114,42 @@
         I also determined that a 10K Ohm resistor was needed for the button because I used a pull-down configureation for the 
         button and 10K Ohm would provide a safe current flow when the button is pressed. 
       </p>
-      <p> *include any calculations of button resistance here* </p>
       <!-- ----------------------------------------- CIRCUIT SECTION --------------------------------------------- -->
-      <h2>Circuit</h2>
-      <img src="./images/circuit.jpeg" alt= "A close up image of a breadboard with a button and LED."/>
+      <h3>Circuit</h3>
+      <img src="./images/circuit.jpeg" alt= "An image of a breadboard with a button and a joystick."/>
       <p> 
         This is a picture of the circuit that I built on a small breadboard. 
         I connected the the button to pin 2 to read it's input. 
         I connected the joystick to the A0 and A1 analog in pins so that I could read the x and y position of the joystick.
       </p>
+      <h3>Enclosure</h3>
+      <img src="./images/circuit.jpeg" alt= "An image of the circuit enclosed in a cardboard controler."/>
+      <p> 
+       I decided that I wanted to spend more time on coding my project, so I created a simple cardboard low-fidelity enclosure.
+      </p>
+      <p> 
+       I used a tea box and turned it inside out, then cut it so that it was half of the normal width. This was the perfect size to fit my Arduino, small breadboard
+       button and joystick. 
+      </p>
+      <p> 
+       It was difficult to get everything to fit in the box with the wires, so in the future I would have soldered my button to a PCB. 
+      </p>
     </div>
+    <br/>
     <!-- ----------------------------------------- CODE SECTION --------------------------------------------- -->
     <div class="code">
-        <br/>
+      <h2>Learning P5.js</h2>
+      <p>
+        I watched the following videos to get started coding my project:
+      </p>
+      <ul>
+        <li><a href="https://youtu.be/FZlpuQeCvlk?si=5o90wqt4v2dDmkff">https://youtu.be/FZlpuQeCvlk?si=5o90wqt4v2dDmkff</a></li>
+        <li><a href="https://youtu.be/5addy2G5DIc?si=mTUIcrl4zLvll8xs">https://youtu.be/5addy2G5DIc?si=mTUIcrl4zLvll8xs</a></li>
+        <li><a href="https://youtu.be/enLvg0VTsAo?si=wLP6pmDQquUHax1n">https://youtu.be/enLvg0VTsAo?si=wLP6pmDQquUHax1n</a></li>
+        <li><a href="https://youtu.be/waF0_y7XheQ?si=Rz-1pXV5UeqWYAqk">https://youtu.be/waF0_y7XheQ?si=Rz-1pXV5UeqWYAqk</a></li>
+        <li><a href="https://youtu.be/Vz-bEwmvzSw?si=-QaRlHbOj20Jp2sv">https://youtu.be/Vz-bEwmvzSw?si=-QaRlHbOj20Jp2sv</a></li>
+        <li><a href="https://youtu.be/HfvTNIe2IaQ?si=oYYeUMVw_t-DP_RR">hhttps://youtu.be/HfvTNIe2IaQ?si=oYYeUMVw_t-DP_RR</a></li>
+      </ul>
       <h2>Ardino Code</h2>
       <p> The following code was written for this project using the Arduino IDE: </p>
       <pre>
@@ -148,16 +215,48 @@ void loop() {
     <!-- ----------------------------------------- LINK TO JAVASCRIPT SECTION --------------------------------------------- -->
     <div class="demo">
       <h2>P5.JS Code</h2>
-        <p> A link to the P5.JS code for this assignment can be found here: <a href="https://github.com/darbyuw/hcde439/blob/main/docs/a6/a6.js">https://github.com/darbyuw/hcde439/blob/main/docs/a6/a6.js</a>.</p>
+        <p> A link to the P5.JS code for this assignment can be found here: <a href="https://github.com/darbyuw/hcde439/blob/main/docs/final/matcha.js">https://github.com/darbyuw/hcde439/blob/main/docs/final/matcha.js</a>.</p>
         <br />
     <!-- ----------------------------------------- DEMO VIDEO SECTION --------------------------------------------- -->
       <h2>Video</h2>
         <p>You can access a video of my project here: <a href="https://youtu.be/lWsW5XKrVow">https://youtu.be/lWsW5XKrVow</a></p>
-        <p> The beginnging of the video shows me interacting with the touch pad to change the brightness of the LED, and the end of the video
-            shows me using the joystick to select different options on the webpage and using the button to move to different pages within the webpage. </p>
+        <p>
+          This video shows the process of moving through the game with the joystick and button in the enclosed controller. 
+          Sections of the video are spead up to show that time would have passed while the user completed homework.
+        </p>
         </p>
     </div>
     <!-- ----------------------------------------- WHAT I LEARNED/REFLECTION SECTION --------------------------------------------- -->
+      <p>
+        One challenge that I ran into was mapping each object to the corrent pixel location. I ended up making a grid on top of my Figma wireframes to 
+        mark every 100 pixels and more cleraly determine where to place each object (images, rectangles, text, etc). However, this took a lot of trial and error
+        to place everything how they looked in the wireframes. I constantly had to shift objects by 5 or 10 pixels and to test if they were in the right place
+        I had to plug in my arduino and move through all the pages in the game from the beginning. 
+      </p>
+      <p>
+        If I were to do this again, I would ensure that my Figma wireframes are the same pixel width and height as my p5.js canvas so that 
+        I could directly reference the object locations. 
+      </p>
+    <script>
+    (function() {
+      let cur = 0;
+      const track = document.getElementById('carouselTrack');
+      const slides = track.children;
+      const dotsEl = document.getElementById('carouselDots');
+      for (let i = 0; i < slides.length; i++) {
+        const d = document.createElement('span');
+        if (i === 0) d.className = 'active';
+        d.onclick = () => carouselGo(i);
+        dotsEl.appendChild(d);
+      }
+      window.carouselMove = function(dir) { carouselGo(cur + dir); };
+      window.carouselGo = function(n) {
+        cur = (n + slides.length) % slides.length;
+        track.style.transform = `translateX(-${cur * 100}%)`;
+        [...dotsEl.children].forEach((d, i) => d.className = i === cur ? 'active' : '');
+      };
+    })();
+    </script>
   </body>
 </html>
 
