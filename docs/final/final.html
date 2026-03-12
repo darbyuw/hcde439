@@ -24,14 +24,37 @@
     </div>
     <!-- --------------------------- PLANNING SECTION --------------------------- -->
     <h2>Planning</h2>
+    <img src="./images/initial_sketch.png" alt= "A digital sketch of a controler and computer"> 
     <p>
-      *include initial design sketches and wireframes on figma here*
+      After brainstoring ideas for this project, I sketched out the initial idea. This sketch shows
+       a controler with a joystick and button as well as a computer showing the web interface.
+    </p>
+    <img src="./images/storyboard.png" alt= "A storyboard of all game pages"> 
+    <p>
+      After proposing my project idea, I sketched each page within the game to understand how a user would move through the game. 
+    </p>
+    <div class="images">
+      <img src="./images/pixel_art.PNG" alt= "A screenshot of a Procreate gallery of artwork"> 
+      <img src="./images/pixel_art_2.PNG" alt= "A screenshot of a Procreate gallery of artwork"> 
+      <p>
+        Throughout this project, I created pixel artwork to make the game more desirable and allow users to customize thier matcha expirience. 
+      </p>
+    </div>
+    <p>
+      *include carousel of figma wireframes*
     </p>
     <p>
       *include description of how/why you came up with the idea *
     </p>
     <p>
-      *include Bill of materials!! *
+      Anticipated Bill of Materials: 
+      Arduino Uno 
+      Joystick (for sensing up, down, left, and right motion to navigate the game)
+      Button (for sensing touch and selecting options in the game)
+      10K ohm resistor (for button)
+      Cardboard and PLA filament (for low and mid fidelity prototypes)
+      Breadboard or arduino extension
+      P5.js, P5.play, HTML, CSS, and JS (for coding the game structure)
     </p>
     <!-- --------------------------- TECHNICAL IMPLEMENTATION SECTION --------------------------- -->
     <h2>Technical Implementation</h2>
@@ -39,40 +62,37 @@
     <div class="schematic">
       <h2>Schematic</h2>
       <div class="imagecrop">
-        <img src="schematic-48.jpg" alt= "A schematic of the circuit."/>
+        <img src="./images/schematic-48.jpg" alt= "A schematic of the circuit."/>
       </div>
       <p> 
         This is a schematic of the circuit that I built for this project. The joystick is connected to the A0 and A1 analog in pins.
         I decided to use a 220 Ohm resistor for the LED because I calculated that a 150 Ohm resistance was needed for a red LED, so I used a 220 Ohm resistor to provide a safe current flow. 
-        I also determined that a 10 Kili Ohm resistor was needed for the button because I used a pull-down configureation for the 
+        I also determined that a 10K Ohm resistor was needed for the button because I used a pull-down configureation for the 
         button and 10K Ohm would provide a safe current flow when the button is pressed. 
       </p>
       <p> *include any calculations of button resistance here* </p>
       <!-- ----------------------------------------- CIRCUIT SECTION --------------------------------------------- -->
       <h2>Circuit</h2>
-      <div class="images">
-         <img src="a6_close.jpeg" alt= "A close up image of a breadboard with a button and LED."/>
-         <img src="a6_far.jpeg" alt= "A far away image of a joystick connected to a breadboard."/>
-      </div>
+      <img src="./images/circuit.jpeg" alt= "A close up image of a breadboard with a button and LED."/>
       <p> 
-        This is a picture of the circuit that I built on a breadboard. 
-        I connected the LED to pin 5 so that I could control its brightness and I connected the button to pin 2. 
+        This is a picture of the circuit that I built on a small breadboard. 
+        I connected the the button to pin 2 to read it's input. 
         I connected the joystick to the A0 and A1 analog in pins so that I could read the x and y position of the joystick.
-    </p>
+      </p>
     </div>
     <!-- ----------------------------------------- CODE SECTION --------------------------------------------- -->
     <div class="code">
         <br/>
       <h2>Ardino Code</h2>
-      <p> The following code was written for this assignment using the Arduino IDE: </p>
+      <p> The following code was written for this project using the Arduino IDE: </p>
       <pre>
         <code>
 // initialize button pin
 const int BUTTON_PIN = 2;
 // Initialize a variable for the analog input pin for x values
-int x = A0;
+int x = A1;
 // Initialize a variable for the analog input pin for y values
-int y = A1;
+int y = A0;
 // Initialize a variable for the joystick x values 
 int xVal = 0;
 // Initialize a variable for the joystick y values
@@ -81,23 +101,28 @@ int yVal = 0;
 int currBtnState = 0;  
 // Initialize variable for keeping track of the previous button status:
 int prevBtnState = currBtnState;
-// Initialize variable for LED pin
-int led = 5;
+
 
 void setup() {
     // start serial communication at 9600 baud rate
     Serial.begin(9600);
     // set the button pin as an input
     pinMode(BUTTON_PIN, INPUT);
-    // set the LED pin as output:
-    pinMode(led, OUTPUT);
 }
 
 void loop() {
+    
     // Read the state of the push button value:
     currBtnState = digitalRead(BUTTON_PIN);
-    // Check if the push button is pressed:
-    Serial.print(currBtnState);
+
+    // if previous button value is 1, and the current value is also 1, dont send the btn state
+    if (prevBtnState == 1 && currBtnState == 1) {
+        // Send a zero to indicate that the btn was not pressed
+        Serial.print(0);
+    } else {
+        // Send the button value to Serial:
+        Serial.print(currBtnState);
+    }
     // Send a comma between each value
     Serial.print(",");
     // Read in the x value from the joystick
@@ -110,15 +135,6 @@ void loop() {
     Serial.print(",");
     // Print the y value to the serial monitor
     Serial.println(yVal);
-
-    // Check if there is data to be read:
-    if (Serial.available() > 0) {
-        // read from the port, constrain to avoid outliers:
-        int inByte = map(Serial.read(), 0, 510, 0, 255);
-        // write a brightness to the LED based on what was received:
-        analogWrite(led, inByte);
-    }
-    
 
     // reset the previous stored state of the button to the current state:
     prevBtnState = currBtnState;
