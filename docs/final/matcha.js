@@ -26,6 +26,7 @@ let confettiInitialized = false;
 // store font figtree
 var figTree;
 
+// This function loads all of the images and fonts that are needed for the game
 function preload() {
     logoImg = loadImage("./assets/logo.png");
     jersey25 = loadFont("Jersey25-Regular.ttf");
@@ -51,12 +52,14 @@ function preload() {
     steam = loadImage("./assets/steam.gif");
 }
 
+// The setup function creates and centers the canvas
 function setup() {
   setupSerial(); // Run our serial setup function (below)
   canvas = createCanvas(800, 500);
   centerCanvas();
 }
 
+// This function controls the change between different stages in the game.
 function draw() {
     const portIsOpen = checkPort(); // Check whether the port is open (see checkPort function below)
     if (!portIsOpen) return; // If the port is not open, exit the draw loop
@@ -409,7 +412,8 @@ function taskOnePage() {
     }
 }
 
-// diaplsy celebration modal when a user has finished a homework task
+// diaplsy celebration modal when a user has finished a homework task. This function takes 
+// in the mesage to be displayed (String), and the number indicating the next stage (Number)
 function celebrationModal(message, nextStage) {
     let str = port.readUntil("\n");
     if (str.length == 0) return;
