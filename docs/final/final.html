@@ -94,9 +94,9 @@
         <li>Joystick (for sensing up, down, left, and right motion to navigate the game)</li>
         <li>Button (for sensing touch and selecting options in the game)</li>
         <li>10K ohm resistor (for button)</li>
-        <li>Cardboard and PLA filament (for low and mid fidelity prototypes)</li>
-        <li>Breadboard or arduino extension</li>
-        <li>P5.js, P5.play, HTML, CSS, and JS (for coding the game structure)</li>
+        <li>Cardboard (for low fidelity prototype)</li>
+        <li>Breadboard or arduino shield</li>
+        <li>P5.js, HTML, CSS, and JS (for coding the game structure)</li>
       </ul>
       <br/>
     </div>
@@ -110,8 +110,7 @@
       </div>
       <p> 
         This is a schematic of the circuit that I built for this project. The joystick is connected to the A0 and A1 analog in pins.
-        I decided to use a 220 Ohm resistor for the LED because I calculated that a 150 Ohm resistance was needed for a red LED, so I used a 220 Ohm resistor to provide a safe current flow. 
-        I also determined that a 10K Ohm resistor was needed for the button because I used a pull-down configureation for the 
+        I determined that a 10K Ohm resistor was needed for the button because I used a pull-down configureation for the 
         button and 10K Ohm would provide a safe current flow when the button is pressed. 
       </p>
       <!-- ----------------------------------------- CIRCUIT SECTION --------------------------------------------- -->
@@ -123,13 +122,18 @@
         I connected the joystick to the A0 and A1 analog in pins so that I could read the x and y position of the joystick.
       </p>
       <h3>Enclosure</h3>
-      <img src="./images/circuit.jpeg" alt= "An image of the circuit enclosed in a cardboard controler."/>
+      <img src="./images/enclosure-top.jpeg" alt= "An image of the circuit enclosed in a cardboard controler."/>
+      <div class="images">
+        <img src="./images/inside-box.jpeg" alt= "An image of the circuit enclosed in a cardboard controler."/>
+        <img src="./images/enclosure1.jpeg" alt= "An image of the circuit enclosed in a cardboard controler."/>
+      </div>
+      
       <p> 
        I decided that I wanted to spend more time on coding my project, so I created a simple cardboard low-fidelity enclosure.
       </p>
       <p> 
-       I used a tea box and turned it inside out, then cut it so that it was half of the normal width. This was the perfect size to fit my Arduino, small breadboard
-       button and joystick. 
+       I used a tea box and turned it inside out, then cut it so that it was half of the normal width. This was the perfect size to fit my Arduino, 
+       small breadboard, button, and joystick. 
       </p>
       <p> 
        It was difficult to get everything to fit in the box with the wires, so in the future I would have soldered my button to a PCB. 
@@ -219,14 +223,15 @@ void loop() {
         <br />
     <!-- ----------------------------------------- DEMO VIDEO SECTION --------------------------------------------- -->
       <h2>Video</h2>
-        <p>You can access a video of my project here: <a href="https://youtu.be/lWsW5XKrVow">https://youtu.be/lWsW5XKrVow</a></p>
+        <p>You can access a video of my project here: <a href="https://youtu.be/8QUP_XsCXiA">https://youtu.be/8QUP_XsCXiA</a></p>
         <p>
-          This video shows the process of moving through the game with the joystick and button in the enclosed controller. 
+          This video shows a game walkthrough with narration followed by a demo of moving through the game with the joystick and button controller. 
           Sections of the video are spead up to show that time would have passed while the user completed homework.
         </p>
         </p>
     </div>
     <!-- ----------------------------------------- WHAT I LEARNED/REFLECTION SECTION --------------------------------------------- -->
+     <h2>Reflection & Lessons Learned</h2>
       <p>
         One challenge that I ran into was mapping each object to the corrent pixel location. I ended up making a grid on top of my Figma wireframes to 
         mark every 100 pixels and more cleraly determine where to place each object (images, rectangles, text, etc). However, this took a lot of trial and error
@@ -236,6 +241,11 @@ void loop() {
       <p>
         If I were to do this again, I would ensure that my Figma wireframes are the same pixel width and height as my p5.js canvas so that 
         I could directly reference the object locations. 
+      </p>
+      <br/>
+      <p>
+        Nexts steps for this project are to adapt it so that it can be used with or without a controller. This would make it more 
+        portable and allow people to use it without having to build the circuit. 
       </p>
     <script>
     (function() {
